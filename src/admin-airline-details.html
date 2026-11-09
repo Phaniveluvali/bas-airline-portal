@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bahrain Airport Services - Airline Management</title>
+
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap 5.3 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <!-- Highcharts Scripts (Local & CDN Fallback) -->
+  <script src="js/highcharts.js"></script>
+  <script src="js/accessibility.js"></script>
+
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <header class="top-navbar">
+    <!-- Left: Menu Button & Brand Logo -->
+    <div class="nav-left">
+      <button class="menu-toggle-btn" type="button" aria-label="Toggle navigation menu" title="Toggle Navigation">
+        <img src="images/menu-icon.jpg" alt="Menu">
+      </button>
+      <a href="#" class="brand-logo-wrap">
+        <img src="images/bas-logo.jpg" alt="Bahrain Airport Services - خدمات مطار البحرين">
+      </a>
+    </div>
+
+    <!-- Center: Global Search Bar -->
+    <div class="nav-center">
+      <div class="global-search-container">
+        <span class="search-icon"><i class="bi bi-search"></i></span>
+        <input type="text" class="search-input" placeholder="Search flights, services, invoices, documents..." aria-label="Global Search">
+        <span class="search-shortcut">⌘ K</span>
+      </div>
+    </div>
+
+    <!-- Right: Notifications & User Profile -->
+    <div class="nav-right">
+            <!-- Ask AI Header Button -->
+      <button type="button" class="btn btn-danger text-white fw-bold d-flex align-items-center gap-2 me-3" style="border-radius: 20px; padding: 0.4rem 1rem; font-size: 0.85rem; border: none; box-shadow: 0 2px 4px rgba(239,68,68,0.2);" onclick="window.location.href = window.location.pathname.includes('admin') ? 'admin-ask-ai.html' : 'airline-ask-ai.html'">
+        <i class="bi bi-robot"></i> Ask AI
+      </button>
+
+      <button class="notification-bell-btn" type="button" aria-label="Notifications" title="12 new notifications" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNotifications">
+        <i class="bi bi-bell"></i>
+        <span class="notification-badge">12</span>
+      </button>
+
+      <!-- User Profile Dropdown -->
+      <div class="dropdown">
+        <div class="user-profile-menu dropdown-toggle" id="userProfileDropdown" data-bs-toggle="dropdown" aria-expanded="false" role="button" title="User Profile & Settings">
+                    <div class="user-avatar" style="background-color: #e40221;">BA</div>
+          <div class="user-meta">
+            <span class="user-name">BAS Admin</span>
+            <span class="user-role">System Administrator</span>
+          </div>
+          <i class="bi bi-chevron-down dropdown-arrow"></i>
+        </div>
+        <div class="dropdown-menu dropdown-menu-end profile-dropdown-menu border-0" aria-labelledby="userProfileDropdown">
+                    <div class="profile-dropdown-header">
+            <div class="avatar-lg" style="background-color: #e40221;">BA</div>
+            <div>
+              <div class="user-title">BAS System Administrator</div>
+              <div class="user-station-tag"><i class="bi bi-geo-alt-fill me-1"></i> BAH &bull; Headquarters</div>
+            </div>
+          </div>
+                    <a class="dropdown-item" href="admin-rbac.html"><i class="bi bi-shield-check"></i> Manage Access</a>
+          <a class="dropdown-item" href="#"><i class="bi bi-gear"></i> System Settings</a>
+          <a class="dropdown-item" href="#"><i class="bi bi-person"></i> My Profile</a>
+          <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#commandPaletteModal"><i class="bi bi-search"></i> Quick Command Palette (?K)</a>
+          <hr class="dropdown-divider my-1">
+          <a class="dropdown-item text-danger" href="index.html"><i class="bi bi-box-arrow-right"></i> Sign Out</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- App Layout: Sidebar + Main Content -->
+  <div class="app-layout">
+    <!-- Sidebar Overlay for Mobile/Tablet -->
+    <div class="sidebar-overlay"></div>
+
+    <!-- Sidebar Navigation -->
+    <aside class="app-sidebar">
+            <div class="sidebar-content">
+                <div class="sidebar-section-title mt-2">MANAGEMENT</div>
+        <ul class="sidebar-nav">
+          <li>
+            <a href="admin-dashboard.html" class="nav-item-link">
+              <i class="bi bi-speedometer2"></i>
+              <span>Dashboard</span>
+            </a>
+          </li>
+          <li>
+            <a href="admin-airlines.html" class="nav-item-link active">
+              <i class="bi bi-airplane"></i>
+              <span>Airlines</span>
+            </a>
+          </li>
+          <li>
+            <a href="admin-approvals.html" class="nav-item-link">
+              <i class="bi bi-file-earmark-text"></i>
+              <span>Registration Approvals</span>
+              <span class="nav-badge" style="background-color: var(--primary-red);">4</span>
+            </a>
+          </li>
+          <li>
+            <a href="admin-users.html" class="nav-item-link">
+              <i class="bi bi-person"></i>
+              <span>Users</span>
+            </a>
+          </li>
+          <li>
+            <a href="admin-rbac.html" class="nav-item-link">
+              <i class="bi bi-people"></i>
+              <span>Roles &amp; Permissions</span>
+            </a>
+          </li>
+        </ul>
+
+        <div class="sidebar-section-title mt-4">SYSTEM</div>
+        <ul class="sidebar-nav">
+          <li>
+            <a href="#" class="nav-item-link">
+              <i class="bi bi-gear"></i>
+              <span>System Settings</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="nav-item-link">
+              <i class="bi bi-bar-chart"></i>
+              <span>Audit Logs</span>
+            </a>
+          </li>
+        </ul>
+
+        <div class="mt-auto pt-3 border-top border-secondary border-opacity-25" style="margin-top: 2rem !important; margin-bottom: 1rem;">
+          <ul class="sidebar-nav mb-0">
+            <li>
+              <a href="#" class="nav-item-link">
+                <i class="bi bi-person"></i>
+                <span>My Profile</span>
+              </a>
+            </li>
+            <li>
+              <a href="index.html" class="nav-item-link">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>Sign out</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <!-- Watermark Airplane Background Illustration (Matching Mockup) -->
+      <div class="sidebar-watermark">
+        <svg viewBox="0 0 260 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Flowing Contrail Streams fanning out from bottom left to aircraft -->
+          <path d="M 0 210 C 50 200, 110 160, 175 105" stroke="#3b82f6" stroke-width="1.2" opacity="0.35"/>
+          <path d="M 0 215 C 65 205, 125 155, 185 100" stroke="#60a5fa" stroke-width="1.5" opacity="0.3"/>
+          <path d="M 5 220 C 75 210, 135 150, 192 95" stroke="#93c5fd" stroke-width="1.2" opacity="0.25"/>
+          <path d="M 15 225 C 85 215, 145 145, 200 90" stroke="#bfdbfe" stroke-width="0.8" opacity="0.2"/>
+
+          <!-- Commercial airliner ascending diagonally towards upper right -->
+          <g transform="translate(195, 95) rotate(-38) scale(0.52)" fill="#4b6b94" opacity="0.55">
+            <!-- Main Body (Fuselage) -->
+            <path d="M 0 -70 Q 7 -30 8 40 Q 8 65 0 75 Q -8 65 -8 40 Q -7 -30 0 -70 Z"/>
+            <!-- Cockpit nose -->
+            <ellipse cx="0" cy="-70" rx="3.5" ry="5"/>
+            <!-- Main Swept Wings -->
+            <polygon points="0,-15 85,38 78,48 0,16 -78,48 -85,38 0,-15"/>
+            <!-- Engines under wings -->
+            <rect x="22" y="10" width="6" height="15" rx="3" fill="#3b567d"/>
+            <rect x="-28" y="10" width="6" height="15" rx="3" fill="#3b567d"/>
+            <!-- Horizontal Stabilizers -->
+            <polygon points="0,52 38,72 34,78 0,66 -34,78 -38,72 0,52"/>
+          </g>
+        </svg>
+      </div>
+
+      <!-- Sidebar Footer (Sign Out) -->
+      <div class="sidebar-footer">
+        <a href="index.html" class="signout-link" title="Sign out to Login">
+          <i class="bi bi-box-arrow-right"></i>
+          <span>Sign out</span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Dashboard Content -->
+                    <main class="main-content" style="background-color: #f1f5f9; padding: 1.5rem;">
+      
+      <!-- Top Navigation -->
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <a href="admin-airlines.html" class="text-danger text-decoration-none fw-bold" style="font-size: 0.9rem;">
+          <i class="bi bi-arrow-left"></i> Back to Airlines
+        </a>
+        <div class="text-muted" style="font-size: 0.75rem;">
+          Dashboard &rsaquo; Airlines &rsaquo; <span class="text-dark fw-bold">Gulf Air</span>
+        </div>
+      </div>
+
+      <!-- Header Card -->
+      <div class="card border-0 shadow-sm rounded-4 bg-white mb-3 overflow-hidden">
+        <div class="p-4 d-flex justify-content-between align-items-start border-bottom">
+          <!-- Left: Logo & Info -->
+          <div class="d-flex gap-4">
+            <div class="d-flex justify-content-center align-items-center" style="width: 120px; height: 80px;">
+              <img src="https://flagcdn.com/w160/bh.png" alt="Gulf Air Logo" class="img-fluid rounded" style="object-fit: contain; max-height: 100%;">
+            </div>
+            <div>
+              <div class="d-flex align-items-center gap-3 mb-1">
+                <h2 class="fw-bold mb-0 text-dark" style="font-size: 1.5rem;">Gulf Air</h2>
+                <span class="badge bg-success bg-opacity-25 text-success px-3 py-1 rounded-pill fw-semibold">Active</span>
+              </div>
+              <div class="text-secondary fw-semibold mb-2" style="font-size: 0.9rem;">Gulf Air Company B.S.C.</div>
+              <p class="text-muted mb-0" style="font-size: 0.85rem; max-width: 500px;">The national carrier of the Kingdom of Bahrain, connecting Bahrain to the world with exceptional service.</p>
+            </div>
+          </div>
+          
+          <!-- Right: Buttons & Quick Stats -->
+          <div class="d-flex flex-column align-items-end gap-4">
+            <div class="d-flex gap-2">
+              <button class="btn btn-outline-secondary btn-sm fw-semibold rounded-3 border px-3"><i class="bi bi-pencil"></i> Edit</button>
+              <button class="btn btn-outline-danger btn-sm fw-semibold rounded-3 border px-3"><i class="bi bi-pause-circle"></i> Suspend</button>
+              <button class="btn btn-outline-danger btn-sm fw-semibold rounded-3 border px-3"><i class="bi bi-trash"></i> Delete</button>
+            </div>
+            <div class="d-flex gap-4 text-start">
+              <div>
+                <div class="text-muted mb-1" style="font-size: 0.7rem;">IATA Code</div>
+                <div class="fw-bold text-dark" style="font-size: 0.9rem;">GF</div>
+              </div>
+              <div class="border-end"></div>
+              <div>
+                <div class="text-muted mb-1" style="font-size: 0.7rem;">ICAO Code</div>
+                <div class="fw-bold text-dark" style="font-size: 0.9rem;">GFA</div>
+              </div>
+              <div class="border-end"></div>
+              <div>
+                <div class="text-muted mb-1" style="font-size: 0.7rem;">Call Sign</div>
+                <div class="fw-bold text-dark" style="font-size: 0.9rem;">GULFAIR</div>
+              </div>
+              <div class="border-end"></div>
+              <div>
+                <div class="text-muted mb-1" style="font-size: 0.7rem;">Home Hub</div>
+                <div class="fw-bold text-dark" style="font-size: 0.9rem;">BAH</div>
+                <div class="text-muted" style="font-size: 0.7rem;">Bahrain International Airport</div>
+              </div>
+              <div class="border-end"></div>
+              <div>
+                <div class="text-muted mb-1" style="font-size: 0.7rem;">Region</div>
+                <div class="fw-bold text-dark" style="font-size: 0.9rem;">Middle East</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="px-4 d-flex gap-4" style="font-size: 0.85rem; font-weight: 600;">
+          <div class="py-3 text-danger border-bottom border-danger border-2 d-flex align-items-center gap-2" style="cursor: pointer;">
+            <i class="bi bi-info-circle-fill"></i> Overview
+          </div>
+          <div class="py-3 text-secondary d-flex align-items-center gap-2 hover-text-dark" style="cursor: pointer;">
+            <i class="bi bi-people"></i> Users (8)
+          </div>
+          <div class="py-3 text-secondary d-flex align-items-center gap-2 hover-text-dark" style="cursor: pointer;">
+            <i class="bi bi-file-earmark-text"></i> Service Requests
+          </div>
+          <div class="py-3 text-secondary d-flex align-items-center gap-2 hover-text-dark" style="cursor: pointer;">
+            <i class="bi bi-airplane"></i> Flights
+          </div>
+          <div class="py-3 text-secondary d-flex align-items-center gap-2 hover-text-dark" style="cursor: pointer;">
+            <i class="bi bi-receipt"></i> Invoices
+          </div>
+          <div class="py-3 text-secondary d-flex align-items-center gap-2 hover-text-dark" style="cursor: pointer;">
+            <i class="bi bi-folder"></i> Documents
+          </div>
+          <div class="py-3 text-secondary d-flex align-items-center gap-2 hover-text-dark" style="cursor: pointer;">
+            <i class="bi bi-gear"></i> Settings
+          </div>
+          <div class="py-3 text-secondary d-flex align-items-center gap-2 hover-text-dark" style="cursor: pointer;">
+            <i class="bi bi-journal-code"></i> Audit Logs
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Content Grid -->
+      <div class="row g-4">
+        
+        <!-- Left Column -->
+        <div class="col-xl-7 d-flex flex-column gap-4">
+          
+          <!-- Airline Information -->
+          <div class="card border-0 shadow-sm rounded-4 bg-white p-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <div class="d-flex align-items-center gap-2">
+                <i class="bi bi-info-circle-fill text-dark fs-5"></i>
+                <h5 class="fw-bold mb-0 text-dark" style="font-size: 1.05rem;">Airline Information</h5>
+              </div>
+              <a href="#" class="text-secondary fw-semibold text-decoration-none" style="font-size: 0.85rem;"><i class="bi bi-pencil"></i> Edit</a>
+            </div>
+            
+            <div class="row g-4" style="font-size: 0.85rem;">
+              <div class="col-6">
+                <div class="d-flex mb-3"><div class="text-secondary w-50">Airline Name</div><div class="text-dark w-50">Gulf Air</div></div>
+                <div class="d-flex mb-3"><div class="text-secondary w-50">IATA Code</div><div class="text-dark w-50">GF</div></div>
+                <div class="d-flex mb-3"><div class="text-secondary w-50">ICAO Code</div><div class="text-dark w-50">GFA</div></div>
+                <div class="d-flex mb-3"><div class="text-secondary w-50">Call Sign</div><div class="text-dark w-50">GULFAIR</div></div>
+                <div class="d-flex mb-3"><div class="text-secondary w-50">Region</div><div class="text-dark w-50">Middle East</div></div>
+                <div class="d-flex mb-3"><div class="text-secondary w-50">Home Hub</div><div class="text-dark w-50">BAH - Bahrain International Airport</div></div>
+                <div class="d-flex"><div class="text-secondary w-50">Website</div><div class="w-50"><a href="#" class="text-primary text-decoration-none">https://www.gulfair.com <i class="bi bi-box-arrow-up-right"></i></a></div></div>
+              </div>
+              <div class="col-6">
+                <div class="d-flex mb-3"><div class="text-secondary w-50">Contact Email</div><div class="w-50"><a href="#" class="text-primary text-decoration-none">ops@gulfair.com</a></div></div>
+                <div class="d-flex mb-3"><div class="text-secondary w-50">Primary Phone</div><div class="text-primary w-50">+973 17 358000</div></div>
+                <div class="d-flex mb-3"><div class="text-secondary w-50">Address</div><div class="text-dark w-50">P.O. Box 138<br>Manama, Kingdom of Bahrain</div></div>
+                <div class="d-flex mb-3"><div class="text-secondary w-50">Time Zone</div><div class="text-dark w-50">Asia/Bahrain (GMT+3)</div></div>
+                <div class="d-flex mb-3"><div class="text-secondary w-50">Status</div><div class="w-50"><span class="badge bg-success bg-opacity-25 text-success rounded-pill px-2">Active</span></div></div>
+                <div class="d-flex mb-3"><div class="text-secondary w-50">Registration Date</div><div class="text-dark w-50">12 Jan 2024</div></div>
+                <div class="d-flex"><div class="text-secondary w-50">Last Updated</div><div class="text-dark w-50">05 Sep 2026, 14:20</div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recent Service Requests -->
+          <div class="card border-0 shadow-sm rounded-4 bg-white p-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <div class="d-flex align-items-center gap-2">
+                <i class="bi bi-file-earmark-text-fill text-dark fs-5"></i>
+                <h5 class="fw-bold mb-0 text-dark" style="font-size: 1.05rem;">Recent Service Requests</h5>
+              </div>
+              <a href="#" class="text-primary fw-semibold text-decoration-none" style="font-size: 0.85rem;">View All &rarr;</a>
+            </div>
+            
+            <table class="table table-borderless table-hover mb-0" style="font-size: 0.8rem;">
+              <thead style="background-color: #f8fafc; border-bottom: 2px solid #f1f5f9;">
+                <tr>
+                  <th class="py-2 px-3 fw-bold text-dark">#</th>
+                  <th class="py-2 fw-bold text-dark">Request ID</th>
+                  <th class="py-2 fw-bold text-dark">Flight No.</th>
+                  <th class="py-2 fw-bold text-dark">Service Type</th>
+                  <th class="py-2 fw-bold text-dark">Request Date</th>
+                  <th class="py-2 text-center fw-bold text-dark">Status</th>
+                  <th class="py-2 text-center fw-bold text-dark">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="py-2 px-3 text-muted">1</td>
+                  <td class="py-2">SR-2026-00124</td>
+                  <td class="py-2 text-muted">GF 152</td>
+                  <td class="py-2 text-muted">Ramp Handling</td>
+                  <td class="py-2 text-muted">21 Sep 2026, 16:45</td>
+                  <td class="py-2 text-center"><span class="badge bg-warning bg-opacity-25 text-warning px-3 rounded-pill">Pending</span></td>
+                  <td class="py-2 text-center"><i class="bi bi-eye text-dark" style="cursor: pointer;"></i></td>
+                </tr>
+                <tr>
+                  <td class="py-2 px-3 text-muted">2</td>
+                  <td class="py-2">SR-2026-00123</td>
+                  <td class="py-2 text-muted">GF 006</td>
+                  <td class="py-2 text-muted">Push Back</td>
+                  <td class="py-2 text-muted">21 Sep 2026, 15:12</td>
+                  <td class="py-2 text-center"><span class="badge bg-primary bg-opacity-10 text-primary px-3 rounded-pill">Under Process</span></td>
+                  <td class="py-2 text-center"><i class="bi bi-eye text-dark" style="cursor: pointer;"></i></td>
+                </tr>
+                <tr>
+                  <td class="py-2 px-3 text-muted">3</td>
+                  <td class="py-2">SR-2026-00122</td>
+                  <td class="py-2 text-muted">GF 210</td>
+                  <td class="py-2 text-muted">Baggage Handling</td>
+                  <td class="py-2 text-muted">21 Sep 2026, 13:08</td>
+                  <td class="py-2 text-center"><span class="badge bg-success bg-opacity-25 text-success px-3 rounded-pill">Completed</span></td>
+                  <td class="py-2 text-center"><i class="bi bi-eye text-dark" style="cursor: pointer;"></i></td>
+                </tr>
+                <tr>
+                  <td class="py-2 px-3 text-muted">4</td>
+                  <td class="py-2">SR-2026-00121</td>
+                  <td class="py-2 text-muted">GF 504</td>
+                  <td class="py-2 text-muted">Cleaning</td>
+                  <td class="py-2 text-muted">21 Sep 2026, 11:20</td>
+                  <td class="py-2 text-center"><span class="badge bg-success bg-opacity-25 text-success px-3 rounded-pill">Completed</span></td>
+                  <td class="py-2 text-center"><i class="bi bi-eye text-dark" style="cursor: pointer;"></i></td>
+                </tr>
+                <tr>
+                  <td class="py-2 px-3 text-muted">5</td>
+                  <td class="py-2">SR-2026-00120</td>
+                  <td class="py-2 text-muted">GF 018</td>
+                  <td class="py-2 text-muted">GPU</td>
+                  <td class="py-2 text-muted">21 Sep 2026, 10:05</td>
+                  <td class="py-2 text-center"><span class="badge bg-danger bg-opacity-10 text-danger px-3 rounded-pill">Cancelled</span></td>
+                  <td class="py-2 text-center"><i class="bi bi-eye text-dark" style="cursor: pointer;"></i></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Documents -->
+          <div class="card border-0 shadow-sm rounded-4 bg-white p-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <div class="d-flex align-items-center gap-2">
+                <i class="bi bi-file-earmark-fill text-dark fs-5"></i>
+                <h5 class="fw-bold mb-0 text-dark" style="font-size: 1.05rem;">Documents</h5>
+              </div>
+              <a href="#" class="text-primary fw-semibold text-decoration-none" style="font-size: 0.85rem;">View All &rarr;</a>
+            </div>
+            
+            <table class="table table-borderless table-hover mb-0" style="font-size: 0.8rem;">
+              <thead style="background-color: #f8fafc; border-bottom: 2px solid #f1f5f9;">
+                <tr>
+                  <th class="py-2 px-3 fw-bold text-dark">#</th>
+                  <th class="py-2 fw-bold text-dark">Document Name</th>
+                  <th class="py-2 fw-bold text-dark">Type</th>
+                  <th class="py-2 fw-bold text-dark">Uploaded On</th>
+                  <th class="py-2 fw-bold text-dark">Uploaded By</th>
+                  <th class="py-2 text-center fw-bold text-dark">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td class="py-2 px-3 text-muted">1</td><td class="py-2 text-primary">Ground Handling Agreement</td><td class="py-2 text-muted">Contract</td><td class="py-2 text-muted">12 Jan 2024</td><td class="py-2 text-muted">BAS Admin</td><td class="py-2 text-center"><i class="bi bi-download text-dark"></i></td></tr>
+                <tr><td class="py-2 px-3 text-muted">2</td><td class="py-2 text-primary">SLA Document</td><td class="py-2 text-muted">SLA</td><td class="py-2 text-muted">15 Jan 2024</td><td class="py-2 text-muted">BAS Admin</td><td class="py-2 text-center"><i class="bi bi-download text-dark"></i></td></tr>
+                <tr><td class="py-2 px-3 text-muted">3</td><td class="py-2 text-primary">Operational Manual</td><td class="py-2 text-muted">Manual</td><td class="py-2 text-muted">20 Jan 2024</td><td class="py-2 text-muted">BAS Admin</td><td class="py-2 text-center"><i class="bi bi-download text-dark"></i></td></tr>
+                <tr><td class="py-2 px-3 text-muted">4</td><td class="py-2 text-primary">Insurance Certificate</td><td class="py-2 text-muted">Agreement</td><td class="py-2 text-muted">01 Feb 2024</td><td class="py-2 text-muted">BAS Admin</td><td class="py-2 text-center"><i class="bi bi-download text-dark"></i></td></tr>
+                <tr><td class="py-2 px-3 text-muted">5</td><td class="py-2 text-primary">Safety Guidelines</td><td class="py-2 text-muted">Manual</td><td class="py-2 text-muted">10 Feb 2024</td><td class="py-2 text-muted">BAS Admin</td><td class="py-2 text-center"><i class="bi bi-download text-dark"></i></td></tr>
+              </tbody>
+            </table>
+          </div>
+          
+        </div>
+
+        <!-- Right Column -->
+        <div class="col-xl-5 d-flex flex-column gap-4">
+          
+          <!-- Statistics -->
+          <div class="card border-0 shadow-sm rounded-4 bg-white p-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <div class="d-flex align-items-center gap-2">
+                <i class="bi bi-bar-chart-fill text-dark fs-5"></i>
+                <h5 class="fw-bold mb-0 text-dark" style="font-size: 1.05rem;">Statistics</h5>
+              </div>
+              <select class="form-select form-select-sm text-secondary" style="width: auto; font-size: 0.8rem;">
+                <option>Last 6 Months</option>
+              </select>
+            </div>
+            
+            <div class="row g-3">
+              <!-- Stat 1 -->
+              <div class="col-6">
+                <div class="border rounded-3 p-3 h-100 d-flex justify-content-between bg-white">
+                  <div class="d-flex flex-column justify-content-between">
+                    <div class="d-flex align-items-center gap-2 mb-2">
+                      <div class="rounded-circle d-flex justify-content-center align-items-center" style="width: 32px; height: 32px; background-color: #fee2e2; color: #ef4444;">
+                        <i class="bi bi-airplane-fill" style="font-size: 0.8rem;"></i>
+                      </div>
+                      <span class="text-secondary" style="font-size: 0.75rem;">Total Flights</span>
+                    </div>
+                    <div>
+                      <div class="fw-bold text-dark fs-4 lh-1 mb-1">428</div>
+                      <div class="text-success" style="font-size: 0.7rem;"><i class="bi bi-arrow-up"></i> 12%</div>
+                    </div>
+                  </div>
+                  <div style="width: 50px; height: 30px; align-self: flex-end;">
+                     <svg viewBox="0 0 50 30" class="w-100 h-100"><path d="M0 25 L 10 20 L 20 22 L 30 15 L 40 18 L 50 5" fill="none" stroke="#ef4444" stroke-width="1.5"/></svg>
+                  </div>
+                </div>
+              </div>
+              <!-- Stat 2 -->
+              <div class="col-6">
+                <div class="border rounded-3 p-3 h-100 d-flex justify-content-between bg-white">
+                  <div class="d-flex flex-column justify-content-between">
+                    <div class="d-flex align-items-center gap-2 mb-2">
+                      <div class="rounded-circle d-flex justify-content-center align-items-center" style="width: 32px; height: 32px; background-color: #e0f2fe; color: #0284c7;">
+                        <i class="bi bi-file-earmark-text-fill" style="font-size: 0.8rem;"></i>
+                      </div>
+                      <span class="text-secondary" style="font-size: 0.75rem;">Service Requests</span>
+                    </div>
+                    <div>
+                      <div class="fw-bold text-dark fs-4 lh-1 mb-1">156</div>
+                      <div class="text-success" style="font-size: 0.7rem;"><i class="bi bi-arrow-up"></i> 8%</div>
+                    </div>
+                  </div>
+                  <div style="width: 50px; height: 30px; align-self: flex-end;">
+                     <svg viewBox="0 0 50 30" class="w-100 h-100"><path d="M0 28 L 15 22 L 30 18 L 50 10" fill="none" stroke="#3b82f6" stroke-width="1.5"/></svg>
+                  </div>
+                </div>
+              </div>
+              <!-- Stat 3 -->
+              <div class="col-6">
+                <div class="border rounded-3 p-3 h-100 d-flex justify-content-between bg-white">
+                  <div class="d-flex flex-column justify-content-between">
+                    <div class="d-flex align-items-center gap-2 mb-2">
+                      <div class="rounded-circle d-flex justify-content-center align-items-center" style="width: 32px; height: 32px; background-color: #dcfce7; color: #16a34a;">
+                        <i class="bi bi-check-circle-fill" style="font-size: 0.8rem;"></i>
+                      </div>
+                      <span class="text-secondary" style="font-size: 0.75rem;">Completed Services</span>
+                    </div>
+                    <div>
+                      <div class="fw-bold text-dark fs-4 lh-1 mb-1">142</div>
+                      <div class="text-success" style="font-size: 0.7rem;"><i class="bi bi-arrow-up"></i> 10%</div>
+                    </div>
+                  </div>
+                  <div style="width: 50px; height: 30px; align-self: flex-end;">
+                     <svg viewBox="0 0 50 30" class="w-100 h-100"><path d="M0 25 Q 15 20 25 15 T 50 5" fill="none" stroke="#10b981" stroke-width="1.5"/></svg>
+                  </div>
+                </div>
+              </div>
+              <!-- Stat 4 -->
+              <div class="col-6">
+                <div class="border rounded-3 p-3 h-100 d-flex justify-content-between bg-white">
+                  <div class="d-flex flex-column justify-content-between">
+                    <div class="d-flex align-items-center gap-2 mb-2">
+                      <div class="rounded-circle d-flex justify-content-center align-items-center" style="width: 32px; height: 32px; background-color: #ffedd5; color: #ea580c;">
+                        <i class="bi bi-clock-fill" style="font-size: 0.8rem;"></i>
+                      </div>
+                      <span class="text-secondary" style="font-size: 0.75rem;">Pending Confirmations</span>
+                    </div>
+                    <div>
+                      <div class="fw-bold text-dark fs-4 lh-1 mb-1">14</div>
+                      <div class="text-danger" style="font-size: 0.7rem;"><i class="bi bi-arrow-down"></i> 3%</div>
+                    </div>
+                  </div>
+                  <div style="width: 50px; height: 30px; align-self: flex-end;">
+                     <svg viewBox="0 0 50 30" class="w-100 h-100"><path d="M0 5 Q 10 10 20 15 T 50 25" fill="none" stroke="#ea580c" stroke-width="1.5"/></svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Assigned Users -->
+          <div class="card border-0 shadow-sm rounded-4 bg-white p-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <div class="d-flex align-items-center gap-2">
+                <i class="bi bi-people-fill text-dark fs-5"></i>
+                <h5 class="fw-bold mb-0 text-dark" style="font-size: 1.05rem;">Assigned Users</h5>
+              </div>
+              <a href="#" class="text-primary fw-semibold text-decoration-none" style="font-size: 0.85rem;">View All &rarr;</a>
+            </div>
+            
+            <table class="table table-borderless table-hover mb-0" style="font-size: 0.8rem;">
+              <thead style="background-color: #f8fafc; border-bottom: 2px solid #f1f5f9;">
+                <tr>
+                  <th class="py-2 px-3 fw-bold text-dark">#</th>
+                  <th class="py-2 fw-bold text-dark">Name</th>
+                  <th class="py-2 fw-bold text-dark">Email</th>
+                  <th class="py-2 fw-bold text-dark">Role</th>
+                  <th class="py-2 text-center fw-bold text-dark">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td class="py-2 px-3 text-muted">1</td><td class="py-2 text-dark">Ahmed Al Khalifa</td><td class="py-2 text-muted">ahmed@gulfair.com</td><td class="py-2 text-muted">Admin</td><td class="py-2 text-center"><span class="badge bg-success bg-opacity-25 text-success rounded-pill px-2">Active</span></td></tr>
+                <tr><td class="py-2 px-3 text-muted">2</td><td class="py-2 text-dark">Sara Mohammed</td><td class="py-2 text-muted">sara@gulfair.com</td><td class="py-2 text-muted">Operations</td><td class="py-2 text-center"><span class="badge bg-success bg-opacity-25 text-success rounded-pill px-2">Active</span></td></tr>
+                <tr><td class="py-2 px-3 text-muted">3</td><td class="py-2 text-dark">Hassan Ali</td><td class="py-2 text-muted">hassan@gulfair.com</td><td class="py-2 text-muted">Finance</td><td class="py-2 text-center"><span class="badge bg-success bg-opacity-25 text-success rounded-pill px-2">Active</span></td></tr>
+                <tr><td class="py-2 px-3 text-muted">4</td><td class="py-2 text-dark">Fatima Salman</td><td class="py-2 text-muted">fatima@gulfair.com</td><td class="py-2 text-muted">Viewer</td><td class="py-2 text-center"><span class="badge bg-success bg-opacity-25 text-success rounded-pill px-2">Active</span></td></tr>
+                <tr><td class="py-2 px-3 text-muted">5</td><td class="py-2 text-dark">Mohammed Yousif</td><td class="py-2 text-muted">m.yousif@gulfair.com</td><td class="py-2 text-muted">Operations</td><td class="py-2 text-center"><span class="badge bg-success bg-opacity-25 text-success rounded-pill px-2">Active</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Notes & Activity -->
+          <div class="card border-0 shadow-sm rounded-4 bg-white p-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <div class="d-flex align-items-center gap-2">
+                <i class="bi bi-file-earmark-text-fill text-dark fs-5"></i>
+                <h5 class="fw-bold mb-0 text-dark" style="font-size: 1.05rem;">Notes &amp; Activity</h5>
+              </div>
+              <a href="#" class="text-primary fw-semibold text-decoration-none" style="font-size: 0.85rem;"><i class="bi bi-plus-lg"></i> Add Note</a>
+            </div>
+            
+            <div class="position-relative ms-3" style="border-left: 2px solid #e2e8f0; padding-left: 1.5rem; padding-bottom: 0.5rem;">
+              <!-- Item 1 -->
+              <div class="mb-4 position-relative">
+                <div class="position-absolute bg-white rounded-circle d-flex justify-content-center align-items-center border" style="width: 28px; height: 28px; left: -2.3rem; top: 0; border-color: #cbd5e1 !important;">
+                   <div class="rounded-circle text-white d-flex justify-content-center align-items-center" style="width: 22px; height: 22px; background-color: #0f172a; font-size: 0.55rem; font-weight: bold;">BA</div>
+                </div>
+                <div class="d-flex justify-content-between align-items-start" style="font-size: 0.8rem;">
+                  <div>
+                    <div class="fw-bold text-dark">BAS Admin</div>
+                    <div class="text-secondary" style="font-size: 0.7rem;">05 Sep 2026, 14:20</div>
+                  </div>
+                  <div class="text-muted w-50 text-end">Airline status changed to Active.</div>
+                </div>
+              </div>
+              <!-- Item 2 -->
+              <div class="mb-4 position-relative">
+                <div class="position-absolute bg-white rounded-circle d-flex justify-content-center align-items-center border" style="width: 28px; height: 28px; left: -2.3rem; top: 0; border-color: #cbd5e1 !important;">
+                   <div class="rounded-circle text-white d-flex justify-content-center align-items-center" style="width: 22px; height: 22px; background-color: #0f172a; font-size: 0.55rem; font-weight: bold;">BA</div>
+                </div>
+                <div class="d-flex justify-content-between align-items-start" style="font-size: 0.8rem;">
+                  <div>
+                    <div class="fw-bold text-dark">BAS Admin</div>
+                    <div class="text-secondary" style="font-size: 0.7rem;">12 Jan 2024, 10:15</div>
+                  </div>
+                  <div class="text-muted w-50 text-end">Airline registered and approved.</div>
+                </div>
+              </div>
+              <!-- Item 3 -->
+              <div class="position-relative">
+                <div class="position-absolute bg-white rounded-circle d-flex justify-content-center align-items-center border" style="width: 28px; height: 28px; left: -2.3rem; top: 0; border-color: #cbd5e1 !important;">
+                   <div class="rounded-circle text-white d-flex justify-content-center align-items-center" style="width: 22px; height: 22px; background-color: #0f172a; font-size: 0.55rem; font-weight: bold;">BA</div>
+                </div>
+                <div class="d-flex justify-content-between align-items-start" style="font-size: 0.8rem;">
+                  <div>
+                    <div class="fw-bold text-dark">BAS Admin</div>
+                    <div class="text-secondary" style="font-size: 0.7rem;">12 Jan 2024, 09:30</div>
+                  </div>
+                  <div class="text-muted w-50 text-end">Initial airline details added.</div>
+                </div>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Notifications Offcanvas Drawer -->
+  <div class="offcanvas offcanvas-end offcanvas-notifications" tabindex="-1" id="offcanvasNotifications" aria-labelledby="offcanvasNotifLabel">
+    <div class="offcanvas-header border-bottom py-3">
+      <div>
+        <h5 class="offcanvas-title fw-bold fs-6 text-dark m-0" id="offcanvasNotifLabel">
+          <i class="bi bi-bell-fill text-danger me-2"></i> Operational Notifications
+        </h5>
+        <small class="text-muted">Live Airside Ground Handling Telemetry</small>
+      </div>
+      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="notif-tab-nav">
+      <button type="button" class="notif-tab-btn active" data-notif-filter="all">All (12)</button>
+      <button type="button" class="notif-tab-btn" data-notif-filter="ops">Airside (5)</button>
+      <button type="button" class="notif-tab-btn" data-notif-filter="confirm">Confirmations (4)</button>
+      <button type="button" class="notif-tab-btn" data-notif-filter="billing">Billing (3)</button>
+    </div>
+    <div class="offcanvas-body p-0" style="overflow-y: auto;">
+      <a href="live-status.html" class="notif-item unread" data-category="ops">
+        <div class="notif-avatar red"><i class="bi bi-airplane-fill"></i></div>
+        <div class="flex-grow-1">
+          <div class="notif-title-row">
+            <span class="notif-title">Flight GF 504 In Progress</span>
+            <span class="notif-time">Just now</span>
+          </div>
+          <p class="notif-snippet">Ramp turnaround commenced at Stand G03. Fueling & baggage loading active.</p>
+        </div>
+      </a>
+      <a href="confirmations.html" class="notif-item unread" data-category="confirm">
+        <div class="notif-avatar blue"><i class="bi bi-check2-circle"></i></div>
+        <div class="flex-grow-1">
+          <div class="notif-title-row">
+            <span class="notif-title">Electronic Sign-Off Required</span>
+            <span class="notif-time">10m ago</span>
+          </div>
+          <p class="notif-snippet">Flight GF 152 departure handling finalized. Captain signature pending.</p>
+        </div>
+      </a>
+      <a href="service-requests.html" class="notif-item unread" data-category="ops">
+        <div class="notif-avatar amber"><i class="bi bi-truck"></i></div>
+        <div class="flex-grow-1">
+          <div class="notif-title-row">
+            <span class="notif-title">High-Priority GSE Dispatched</span>
+            <span class="notif-time">22m ago</span>
+          </div>
+          <p class="notif-snippet">Air Start Unit (ASU-04) en-route to Remote Stand S21 for GF 210.</p>
+        </div>
+      </a>
+      <a href="invoices.html" class="notif-item" data-category="billing">
+        <div class="notif-avatar green"><i class="bi bi-receipt"></i></div>
+        <div class="flex-grow-1">
+          <div class="notif-title-row">
+            <span class="notif-title">Invoice INV-2026-0891 Issued</span>
+            <span class="notif-time">1h ago</span>
+          </div>
+          <p class="notif-snippet">Ground handling disbursement statement for Gulf Air July turnaround.</p>
+        </div>
+      </a>
+      <a href="documents.html" class="notif-item" data-category="ops">
+        <div class="notif-avatar blue"><i class="bi bi-file-earmark-pdf"></i></div>
+        <div class="flex-grow-1">
+          <div class="notif-title-row">
+            <span class="notif-title">New IATA De-icing SOP Uploaded</span>
+            <span class="notif-time">2h ago</span>
+          </div>
+          <p class="notif-snippet">Bahrain Airport Services compliance document v4.2 published.</p>
+        </div>
+      </a>
+    </div>
+          <div class="p-3 border-top bg-light text-center">
+        <a href="notifications.html" class="btn btn-outline-secondary btn-sm w-100 fw-semibold">
+          View All Notifications
+        </a>
+      </div>
+  </div>
+
+  <!-- Command Palette / Global Search Modal (⌘K) -->
+  <div class="modal fade" id="commandPaletteModal" tabindex="-1" aria-labelledby="cmdPaletteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content border-0 shadow-lg" style="border-radius: 16px; overflow: hidden;">
+        <div class="cmd-search-input-wrap bg-white">
+          <i class="bi bi-search text-danger"></i>
+          <input type="text" id="cmdPaletteSearchInput" class="cmd-search-input" placeholder="Type a flight (GF 504), service (Fueling), invoice, or page..." autocomplete="off">
+          <span class="badge bg-light text-secondary border">ESC to close</span>
+        </div>
+        <div class="cmd-results-body bg-white">
+          <div class="cmd-category-title">Portal Navigation</div>
+          <a href="dashboard.html" class="cmd-result-item"><div class="cmd-result-left"><i class="bi bi-house-door text-danger"></i> Operational Dashboard</div><span class="cmd-tag">Page</span></a>
+          <a href="flights.html" class="cmd-result-item"><div class="cmd-result-left"><i class="bi bi-airplane text-danger"></i> Flight Management</div><span class="cmd-tag">Page</span></a>
+          <a href="live-status.html" class="cmd-result-item"><div class="cmd-result-left"><i class="bi bi-tv text-danger"></i> Live FIDS Wallboard Display</div><span class="cmd-tag">Screen</span></a>
+          <a href="service-requests.html" class="cmd-result-item"><div class="cmd-result-left"><i class="bi bi-file-earmark-text text-danger"></i> Service Requests</div><span class="cmd-tag">Page</span></a>
+          <a href="confirmations.html" class="cmd-result-item"><div class="cmd-result-left"><i class="bi bi-check2-circle text-danger"></i> Electronic Confirmations</div><span class="cmd-tag">Page</span></a>
+          <a href="invoices.html" class="cmd-result-item"><div class="cmd-result-left"><i class="bi bi-receipt text-danger"></i> Invoices & Billing</div><span class="cmd-tag">Page</span></a>
+          <a href="reports.html" class="cmd-result-item"><div class="cmd-result-left"><i class="bi bi-bar-chart-line text-danger"></i> Reports & SLA Analytics</div><span class="cmd-tag">Page</span></a>
+          <a href="documents.html" class="cmd-result-item"><div class="cmd-result-left"><i class="bi bi-folder text-danger"></i> Document Repository</div><span class="cmd-tag">Page</span></a>
+          <a href="administration.html" class="cmd-result-item"><div class="cmd-result-left"><i class="bi bi-gear text-danger"></i> Roles & Permissions</div><span class="cmd-tag">Admin</span></a>
+
+          <div class="cmd-category-title mt-2">Active Airside Flights</div>
+          <a href="live-status.html" class="cmd-result-item"><div class="cmd-result-left"><i class="bi bi-airplane-fill text-primary"></i> GF 504 &bull; BAH &rarr; BOM (Stand G03)</div><span class="badge bg-primary text-white">In Progress</span></a>
+          <a href="flights.html" class="cmd-result-item"><div class="cmd-result-left"><i class="bi bi-airplane-fill text-success"></i> GF 006 &bull; BAH &rarr; DXB (Stand S07)</div><span class="badge bg-success text-white">On Time</span></a>
+          <a href="flights.html" class="cmd-result-item"><div class="cmd-result-left"><i class="bi bi-airplane-fill text-warning"></i> GF 210 &bull; CAI &rarr; BAH (Stand S21)</div><span class="badge bg-warning text-dark">Delayed</span></a>
+          <a href="flights.html" class="cmd-result-item"><div class="cmd-result-left"><i class="bi bi-airplane-fill text-info"></i> GF 152 &bull; BAH &rarr; LHR (Stand S12)</div><span class="badge bg-info text-dark">Boarding</span></a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap 5.3 JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Application Logic -->
+  <script src="js/main.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

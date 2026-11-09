@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bahrain Airport Services - Reports & Analytics</title>
+
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap 5.3 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <!-- Highcharts Scripts -->
+  <script src="js/highcharts.js"></script>
+  <script src="js/accessibility.js"></script>
+
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <header class="top-navbar">
+    <!-- Left: Menu Button & Brand Logo -->
+    <div class="nav-left">
+      <button class="menu-toggle-btn" type="button" aria-label="Toggle navigation menu" title="Toggle Navigation">
+        <img src="images/menu-icon.jpg" alt="Menu">
+      </button>
+      <a href="dashboard.html" class="brand-logo-wrap">
+        <img src="images/bas-logo.jpg" alt="Bahrain Airport Services - خدمات مطار البحرين">
+      </a>
+    </div>
+
+    <!-- Center: Global Search Bar -->
+    <div class="nav-center">
+      <div class="global-search-container" role="button" title="Click or press Ctrl+K to search">
+        <span class="search-icon"><i class="bi bi-search"></i></span>
+        <input type="text" class="search-input" placeholder="Search reports, flights, SLA metrics..." aria-label="Global Search">
+        <span class="search-shortcut">⌘ K</span>
+      </div>
+    </div>
+
+    <!-- Right: Notifications & User Profile -->
+    <div class="nav-right">
+            <!-- Ask AI Header Button -->
+      <button type="button" class="btn btn-danger text-white fw-bold d-flex align-items-center gap-2 me-3" style="border-radius: 20px; padding: 0.4rem 1rem; font-size: 0.85rem; border: none; box-shadow: 0 2px 4px rgba(239,68,68,0.2);" onclick="window.location.href = window.location.pathname.includes('admin') ? 'admin-ask-ai.html' : 'airline-ask-ai.html'">
+        <i class="bi bi-robot"></i> Ask AI
+      </button>
+
+      <button class="notification-bell-btn" type="button" aria-label="Notifications" title="12 new notifications" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNotifications">
+        <i class="bi bi-bell"></i>
+        <span class="notification-badge">12</span>
+      </button>
+
+      <!-- User Profile Dropdown -->
+      <div class="dropdown">
+        <div class="user-profile-menu dropdown-toggle" id="userProfileDropdown" data-bs-toggle="dropdown" aria-expanded="false" role="button" title="User Profile & Settings">
+          <div class="user-avatar">GF</div>
+          <div class="user-meta">
+            <span class="user-name">Gulf Air Ops</span>
+            <span class="user-role">Operations Controller</span>
+          </div>
+          <i class="bi bi-chevron-down dropdown-arrow"></i>
+        </div>
+        <div class="dropdown-menu dropdown-menu-end profile-dropdown-menu border-0" aria-labelledby="userProfileDropdown">
+                    <div class="profile-dropdown-header">
+            <div class="avatar-lg" style="background-color: #0f172a;">GF</div>
+            <div>
+              <div class="user-title">Gulf Air Operations</div>
+              <div class="user-station-tag"><i class="bi bi-geo-alt-fill me-1"></i> BAH &bull; Airline Customer</div>
+            </div>
+          </div>
+                    <a class="dropdown-item" href="#"><i class="bi bi-person"></i> My Profile</a>
+          <a class="dropdown-item" href="#"><i class="bi bi-bell"></i> Notification Preferences</a>
+          <a class="dropdown-item" href="live-status.html"><i class="bi bi-tv"></i> Live FIDS Wallboard</a>
+          <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#commandPaletteModal"><i class="bi bi-search"></i> Quick Command Palette (?K)</a>
+          <hr class="dropdown-divider my-1">
+          <a class="dropdown-item text-danger" href="index.html"><i class="bi bi-box-arrow-right"></i> Sign Out</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- App Layout: Sidebar + Main Content -->
+  <div class="app-layout">
+    <!-- Sidebar Overlay for Mobile/Tablet -->
+    <div class="sidebar-overlay"></div>
+
+    <!-- Sidebar Navigation -->
+    <aside class="app-sidebar">
+      <div class="sidebar-content">
+        <ul class="sidebar-nav">
+          <li>
+            <a href="dashboard.html" class="nav-item-link">
+              <i class="bi bi-house-door"></i>
+              <span>Dashboard</span>
+            </a>
+          </li>
+          <li>
+            <a href="flights.html" class="nav-item-link">
+              <i class="bi bi-airplane"></i>
+              <span>Flights</span>
+            </a>
+          </li>
+          <li>
+            <a href="service-requests.html" class="nav-item-link">
+              <i class="bi bi-file-earmark-text"></i>
+              <span>Service Requests</span>
+            </a>
+          </li>
+          <li>
+            <a href="#offcanvasNotifications" class="nav-item-link" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNotifications" role="button" aria-controls="offcanvasNotifications" title="Open Notifications Drawer">
+              <i class="bi bi-bell"></i>
+              <span>Notifications</span>
+              <span class="nav-badge">5</span>
+            </a>
+          </li>
+          <li>
+            <a href="invoices.html" class="nav-item-link">
+              <i class="bi bi-receipt"></i>
+              <span>Invoices</span>
+            </a>
+          </li>
+          <li>
+            <a href="reports.html" class="nav-item-link active">
+              <i class="bi bi-bar-chart-line-fill"></i>
+              <span>Reports</span>
+            </a>
+          </li>
+          <li>
+            <a href="documents.html" class="nav-item-link">
+              <i class="bi bi-folder"></i>
+              <span>Documents</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Watermark Airplane Illustration -->
+      <div class="sidebar-watermark">
+        <svg viewBox="0 0 260 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M 0 210 C 50 200, 110 160, 175 105" stroke="#3b82f6" stroke-width="1.2" opacity="0.35"/>
+          <path d="M 0 215 C 65 205, 125 155, 185 100" stroke="#60a5fa" stroke-width="1.5" opacity="0.3"/>
+          <g transform="translate(165, 80) rotate(42) scale(0.38)" fill="#2563eb" opacity="0.45">
+            <path d="M 0 0 L 12 42 L 52 50 L 12 58 L 0 100 L -12 58 L -52 50 L -12 42 Z"/>
+          </g>
+        </svg>
+      </div>
+
+      <!-- Sidebar Footer (Sign Out) -->
+      <div class="sidebar-footer">
+        <a href="index.html" class="signout-link" title="Sign out to Login">
+          <i class="bi bi-box-arrow-right"></i>
+          <span>Sign out</span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <!-- Header: Breadcrumb & Title Row -->
+      <div class="dashboard-header-wrap">
+        <div>
+          <!-- Breadcrumb -->
+          <div class="breadcrumb-wrap">
+            <a href="dashboard.html" class="breadcrumb-link">Home</a>
+            <span class="breadcrumb-sep"><i class="bi bi-chevron-right"></i></span>
+            <span class="breadcrumb-current">Reports</span>
+          </div>
+
+          <h1 class="dashboard-heading">Reports & Operational Analytics</h1>
+          <div class="dashboard-submeta">
+            <span>Airside turnaround KPIs, SLA compliance audits, and ground service billing reports</span>
+            <span class="meta-dot">•</span>
+            <span>Source: BAS Ground Handling Telemetry</span>
+          </div>
+        </div>
+
+        <div class="dashboard-actions">
+          <a href="live-status.html" class="btn-live-wallboard" title="Open Live FIDS Wallboard">
+            <i class="bi bi-broadcast"></i>
+            <span>Live FIDS Wallboard</span>
+            <span class="badge-live">LIVE</span>
+          </a>
+
+          <!-- Date Range Filter Dropdown -->
+          <div class="dropdown">
+            <button type="button" class="btn-today-filter dropdown-toggle" id="dateFilterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-calendar3"></i>
+              <span id="current-date-filter-label">Last 14 Days</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end date-filter-dropdown border-0" aria-labelledby="dateFilterDropdown">
+              <li class="dropdown-header small text-uppercase fw-bold text-muted px-3 py-1">Time Horizon</li>
+              <li><a class="dropdown-item d-flex align-items-center justify-content-between" href="#" data-range="today"><span><i class="bi bi-calendar-check me-2 text-muted"></i> Today (04 Aug 2026)</span></a></li>
+              <li><a class="dropdown-item d-flex align-items-center justify-content-between" href="#" data-range="yesterday"><span><i class="bi bi-calendar-event me-2 text-muted"></i> Yesterday</span></a></li>
+              <li><a class="dropdown-item active d-flex align-items-center justify-content-between" href="#" data-range="last14"><span><i class="bi bi-calendar-range me-2 text-danger"></i> Last 14 Days</span><i class="bi bi-check2"></i></a></li>
+              <li><a class="dropdown-item d-flex align-items-center justify-content-between" href="#" data-range="month"><span><i class="bi bi-calendar-month me-2 text-muted"></i> This Month (August 2026)</span></a></li>
+            </ul>
+          </div>
+
+          <!-- Export Actions Dropdown -->
+          <div class="dropdown">
+            <button type="button" class="btn-export-primary dropdown-toggle" id="exportDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-download"></i>
+              <span>Export</span>
+              <i class="bi bi-chevron-down ms-1" style="font-size: 0.7rem;"></i>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end export-dropdown border-0" aria-labelledby="exportDropdown">
+              <li class="dropdown-header small text-uppercase fw-bold text-muted px-3 py-1">Export Analytics</li>
+              <li><a class="dropdown-item export-action-btn d-flex align-items-center gap-2 py-2" href="#" data-format="pdf"><i class="bi bi-file-earmark-pdf text-danger fs-5"></i><div><div class="fw-semibold text-dark">Executive SLA Audit Report (.pdf)</div><small class="text-muted">Formal compliance certificate for airline station management</small></div></a></li>
+              <li><a class="dropdown-item export-action-btn d-flex align-items-center gap-2 py-2" href="#" data-format="excel"><i class="bi bi-file-earmark-excel text-success fs-5"></i><div><div class="fw-semibold text-dark">Turnaround Timestamps Workbook (.xlsx)</div><small class="text-muted">Detailed on-block, fueling, baggage, and off-block telemetry</small></div></a></li>
+              <li><a class="dropdown-item export-action-btn d-flex align-items-center gap-2 py-2" href="#" data-format="csv"><i class="bi bi-file-earmark-spreadsheet text-primary fs-5"></i><div><div class="fw-semibold text-dark">Raw GSE Utilization Log (.csv)</div><small class="text-muted">Equipment dispatch run-times and operator logs</small></div></a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4 Top KPI Analytical Cards -->
+      <div class="reports-kpi-grid">
+        <!-- 1. Turnaround SLA Compliance -->
+        <div class="reports-kpi-card">
+          <div class="d-flex align-items-center justify-content-between mb-2">
+            <span class="text-muted small fw-semibold">Turnaround SLA Compliance</span>
+            <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill">Target: 90%</span>
+          </div>
+          <div class="d-flex align-items-baseline gap-2 mb-1">
+            <span class="fs-2 fw-bold text-dark">96.4%</span>
+            <span class="text-success small fw-bold"><i class="bi bi-arrow-up-right"></i> +1.2%</span>
+          </div>
+          <div class="small text-muted">142 of 148 flights met SLA milestones</div>
+        </div>
+
+        <!-- 2. Average Turnaround Duration -->
+        <div class="reports-kpi-card">
+          <div class="d-flex align-items-center justify-content-between mb-2">
+            <span class="text-muted small fw-semibold">Average Turnaround Duration</span>
+            <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill">Target: 50 min</span>
+          </div>
+          <div class="d-flex align-items-baseline gap-2 mb-1">
+            <span class="fs-2 fw-bold text-dark">44 min</span>
+            <span class="text-success small fw-bold"><i class="bi bi-lightning-charge-fill"></i> -6m buffer</span>
+          </div>
+          <div class="small text-muted">A320/A321 avg: 38m • B788 avg: 56m</div>
+        </div>
+
+        <!-- 3. Baggage Delivery (AHM 810) -->
+        <div class="reports-kpi-card">
+          <div class="d-flex align-items-center justify-content-between mb-2">
+            <span class="text-muted small fw-semibold">Baggage Delivery (AHM 810)</span>
+            <span class="badge bg-purple-subtle text-purple border rounded-pill" style="color: #6d28d9; background: #ede9fe;">100% Met</span>
+          </div>
+          <div class="d-flex align-items-baseline gap-2 mb-1">
+            <span class="fs-2 fw-bold text-dark">11m <span class="fs-6 text-muted fw-normal">/ 26m</span></span>
+          </div>
+          <div class="small text-muted">First bag on carousel: 11m • Last bag: 26m</div>
+        </div>
+
+        <!-- 4. Total Billable Services -->
+        <div class="reports-kpi-card">
+          <div class="d-flex align-items-center justify-content-between mb-2">
+            <span class="text-muted small fw-semibold">Billable Services (August MTD)</span>
+            <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle rounded-pill">1,420 Items</span>
+          </div>
+          <div class="d-flex align-items-baseline gap-2 mb-1">
+            <span class="fs-2 fw-bold text-dark">BHD 184,520</span>
+          </div>
+          <div class="small text-muted">Ground handling, GSE power, water, pushback</div>
+        </div>
+      </div>
+
+      <!-- Highcharts Visualizations Grid -->
+      <div class="reports-analytics-grid">
+        <!-- Chart 1: Delay Root-Cause Breakdown -->
+        <div class="content-card mb-0">
+          <div class="card-header-flex">
+            <div>
+              <h2 class="card-title-text">Turnaround Delay Root-Cause Analysis</h2>
+              <small class="text-muted">Total delay minutes recorded across 14-day flight operations</small>
+            </div>
+            <span class="badge bg-light text-secondary border">OCC Delay Codes</span>
+          </div>
+          <div id="reports-delay-chart" style="height: 300px; width: 100%;"></div>
+        </div>
+
+        <!-- Chart 2: SLA Performance Multi-Series -->
+        <div class="content-card mb-0">
+          <div class="card-header-flex">
+            <div>
+              <h2 class="card-title-text">SLA Compliance Trends</h2>
+              <small class="text-muted">Daily punctuality % vs Contractual Target</small>
+            </div>
+          </div>
+          <div id="reports-sla-trend-chart" style="height: 300px; width: 100%;"></div>
+        </div>
+      </div>
+
+      <!-- Scheduled & Ad-Hoc Reports Repository Table -->
+      <div class="content-card mt-4">
+        <div class="card-header-flex pb-3 border-bottom">
+          <div>
+            <h2 class="card-title-text">Available Airside Operational Reports</h2>
+            <small class="text-muted">Automated schedules and on-demand report generation</small>
+          </div>
+          <div class="d-flex gap-2">
+            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="showAirsideToast('Schedule Updated', 'All daily OCC reports will be delivered at 06:00 AST.', 'bi-clock-history')">
+              <i class="bi bi-clock me-1"></i> Delivery Schedule
+            </button>
+            <button type="button" class="btn btn-danger btn-sm fw-semibold" style="background-color: var(--primary-red); border-color: var(--primary-red);" onclick="showAirsideToast('Generating Report', 'Running ad-hoc custom query for Gulf Air...', 'bi-gear-wide-connected')">
+              <i class="bi bi-plus-lg me-1"></i> New Custom Report
+            </button>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table align-middle table-hover mb-0">
+            <thead class="table-light">
+              <tr>
+                <th scope="col" style="font-size: 0.78rem; font-weight: 700; color: #64748b;">REPORT NAME</th>
+                <th scope="col" style="font-size: 0.78rem; font-weight: 700; color: #64748b;">CATEGORY</th>
+                <th scope="col" style="font-size: 0.78rem; font-weight: 700; color: #64748b;">FREQUENCY</th>
+                <th scope="col" style="font-size: 0.78rem; font-weight: 700; color: #64748b;">LAST RUN</th>
+                <th scope="col" style="font-size: 0.78rem; font-weight: 700; color: #64748b;">FORMAT</th>
+                <th scope="col" style="font-size: 0.78rem; font-weight: 700; color: #64748b;">STATUS</th>
+                <th scope="col" style="font-size: 0.78rem; font-weight: 700; color: #64748b; text-align: right;">ACTION</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Row 1 -->
+              <tr>
+                <td>
+                  <div class="fw-bold text-dark">Daily Ramp Turnaround & Pushback Log</div>
+                  <small class="text-muted">Turnaround milestones, pushback tug assignment, delay attribution</small>
+                </td>
+                <td><span class="badge bg-light text-dark border">Airside Ops</span></td>
+                <td class="text-muted small">Daily @ 06:00 AST</td>
+                <td class="text-dark small fw-medium">Today, 06:00</td>
+                <td><span class="badge bg-primary-subtle text-primary">PDF • XLSX</span></td>
+                <td><span class="badge bg-success-subtle text-success">Automated</span></td>
+                <td class="text-end">
+                  <button type="button" class="btn btn-sm btn-outline-danger export-action-btn" data-format="pdf" title="Download Report">
+                    <i class="bi bi-download"></i> Download
+                  </button>
+                </td>
+              </tr>
+
+              <!-- Row 2 -->
+              <tr>
+                <td>
+                  <div class="fw-bold text-dark">Airline SLA Compliance & Penalty Matrix</div>
+                  <small class="text-muted">Contractual punctuality thresholds and turnaround performance review</small>
+                </td>
+                <td><span class="badge bg-light text-dark border">SLA Audits</span></td>
+                <td class="text-muted small">Weekly (Mon)</td>
+                <td class="text-dark small fw-medium">Yesterday, 23:59</td>
+                <td><span class="badge bg-danger-subtle text-danger">PDF</span></td>
+                <td><span class="badge bg-success-subtle text-success">Automated</span></td>
+                <td class="text-end">
+                  <button type="button" class="btn btn-sm btn-outline-danger export-action-btn" data-format="pdf" title="Download Report">
+                    <i class="bi bi-download"></i> Download
+                  </button>
+                </td>
+              </tr>
+
+              <!-- Row 3 -->
+              <tr>
+                <td>
+                  <div class="fw-bold text-dark">Ground Support Equipment (GSE) Utilization</div>
+                  <small class="text-muted">GPU, ASU, Baggage Tractor, and Belt Loader running hours telemetry</small>
+                </td>
+                <td><span class="badge bg-light text-dark border">Equipment</span></td>
+                <td class="text-muted small">Daily @ 00:00 AST</td>
+                <td class="text-dark small fw-medium">Today, 00:00</td>
+                <td><span class="badge bg-success-subtle text-success">XLSX</span></td>
+                <td><span class="badge bg-success-subtle text-success">Automated</span></td>
+                <td class="text-end">
+                  <button type="button" class="btn btn-sm btn-outline-danger export-action-btn" data-format="excel" title="Download Report">
+                    <i class="bi bi-download"></i> Download
+                  </button>
+                </td>
+              </tr>
+
+              <!-- Row 4 -->
+              <tr>
+                <td>
+                  <div class="fw-bold text-dark">IATA Baggage Delivery Standard Audit (AHM 810)</div>
+                  <small class="text-muted">Chute offload to carousel timings for Bahrain Airport arrivals</small>
+                </td>
+                <td><span class="badge bg-light text-dark border">Operations</span></td>
+                <td class="text-muted small">Monthly</td>
+                <td class="text-dark small fw-medium">01 Aug 2026</td>
+                <td><span class="badge bg-danger-subtle text-danger">PDF</span></td>
+                <td><span class="badge bg-success-subtle text-success">Certified</span></td>
+                <td class="text-end">
+                  <button type="button" class="btn btn-sm btn-outline-danger export-action-btn" data-format="pdf" title="Download Report">
+                    <i class="bi bi-download"></i> Download
+                  </button>
+                </td>
+              </tr>
+
+              <!-- Row 5 -->
+              <tr>
+                <td>
+                  <div class="fw-bold text-dark">Monthly Billing & Disbursement Summary (Gulf Air)</div>
+                  <small class="text-muted">Full itemization of handling, cleaning, and ad-hoc ramp service fees</small>
+                </td>
+                <td><span class="badge bg-light text-dark border">Finance</span></td>
+                <td class="text-muted small">Monthly</td>
+                <td class="text-dark small fw-medium">01 Aug 2026</td>
+                <td><span class="badge bg-success-subtle text-success">XLSX • CSV</span></td>
+                <td><span class="badge bg-info-subtle text-info">Ready</span></td>
+                <td class="text-end">
+                  <button type="button" class="btn btn-sm btn-outline-danger export-action-btn" data-format="excel" title="Download Report">
+                    <i class="bi bi-download"></i> Download
+                  </button>
+                </td>
+              </tr>
+
+              <!-- Row 6 -->
+              <tr>
+                <td>
+                  <div class="fw-bold text-dark">Airside Safety & Foreign Object Debris (FOD) Log</div>
+                  <small class="text-muted">Ramp safety audits, stand cleanliness checklists, and safety occurrences</small>
+                </td>
+                <td><span class="badge bg-light text-dark border">Safety</span></td>
+                <td class="text-muted small">Weekly</td>
+                <td class="text-dark small fw-medium">03 Aug 2026</td>
+                <td><span class="badge bg-danger-subtle text-danger">PDF</span></td>
+                <td><span class="badge bg-success-subtle text-success">Automated</span></td>
+                <td class="text-end">
+                  <button type="button" class="btn btn-sm btn-outline-danger export-action-btn" data-format="pdf" title="Download Report">
+                    <i class="bi bi-download"></i> Download
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Notifications Offcanvas Drawer -->
+  <div class="offcanvas offcanvas-end offcanvas-notifications" tabindex="-1" id="offcanvasNotifications" aria-labelledby="offcanvasNotifLabel">
+    <div class="offcanvas-header border-bottom py-3">
+      <div>
+        <h5 class="offcanvas-title fw-bold fs-6 text-dark m-0" id="offcanvasNotifLabel">
+          <i class="bi bi-bell-fill text-danger me-2"></i> Operational Notifications
+        </h5>
+        <small class="text-muted">Live Airside Ground Handling Telemetry</small>
+      </div>
+      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="notif-tab-nav">
+      <button type="button" class="notif-tab-btn active" data-notif-filter="all">All (12)</button>
+      <button type="button" class="notif-tab-btn" data-notif-filter="ops">Airside (5)</button>
+      <button type="button" class="notif-tab-btn" data-notif-filter="confirm">Confirmations (4)</button>
+      <button type="button" class="notif-tab-btn" data-notif-filter="billing">Billing (3)</button>
+    </div>
+    <div class="offcanvas-body p-0" style="overflow-y: auto;">
+      <a href="live-status.html" class="notif-item unread" data-category="ops">
+        <div class="notif-avatar red"><i class="bi bi-airplane-fill"></i></div>
+        <div class="flex-grow-1">
+          <div class="notif-title-row">
+            <span class="notif-title">Flight GF 504 In Progress</span>
+            <span class="notif-time">Just now</span>
+          </div>
+          <p class="notif-snippet">Ramp turnaround commenced at Stand G03. Fueling & baggage loading active.</p>
+        </div>
+      </a>
+      <a href="confirmations.html" class="notif-item unread" data-category="confirm">
+        <div class="notif-avatar blue"><i class="bi bi-check2-circle"></i></div>
+        <div class="flex-grow-1">
+          <div class="notif-title-row">
+            <span class="notif-title">Electronic Sign-Off Required</span>
+            <span class="notif-time">10m ago</span>
+          </div>
+          <p class="notif-snippet">Flight GF 152 departure handling finalized. Captain signature pending.</p>
+        </div>
+      </a>
+      <a href="service-requests.html" class="notif-item unread" data-category="ops">
+        <div class="notif-avatar amber"><i class="bi bi-truck"></i></div>
+        <div class="flex-grow-1">
+          <div class="notif-title-row">
+            <span class="notif-title">High-Priority GSE Dispatched</span>
+            <span class="notif-time">22m ago</span>
+          </div>
+          <p class="notif-snippet">Air Start Unit (ASU-04) en-route to Remote Stand S21 for GF 210.</p>
+        </div>
+      </a>
+      <a href="invoices.html" class="notif-item" data-category="billing">
+        <div class="notif-avatar green"><i class="bi bi-receipt"></i></div>
+        <div class="flex-grow-1">
+          <div class="notif-title-row">
+            <span class="notif-title">Invoice INV-2026-0891 Issued</span>
+            <span class="notif-time">1h ago</span>
+          </div>
+          <p class="notif-snippet">Ground handling disbursement statement for Gulf Air July turnaround.</p>
+        </div>
+      </a>
+    </div>
+          <div class="p-3 border-top bg-light text-center">
+        <a href="notifications.html" class="btn btn-outline-secondary btn-sm w-100 fw-semibold">
+          View All Notifications
+        </a>
+      </div>
+  </div>
+
+  <!-- Command Palette / Global Search Modal (⌘K) -->
+  <div class="modal fade" id="commandPaletteModal" tabindex="-1" aria-labelledby="cmdPaletteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content border-0 shadow-lg" style="border-radius: 16px; overflow: hidden;">
+        <div class="cmd-search-input-wrap bg-white">
+          <i class="bi bi-search text-danger"></i>
+          <input type="text" id="cmdPaletteSearchInput" class="cmd-search-input" placeholder="Type a report, flight, invoice, or page..." autocomplete="off">
+          <span class="badge bg-light text-secondary border">ESC to close</span>
+        </div>
+        <div class="cmd-results-body bg-white">
+          <div class="cmd-category-title">Portal Navigation</div>
+          <a href="dashboard.html" class="cmd-result-item"><div class="cmd-result-left"><i class="bi bi-house-door text-danger"></i> Operational Dashboard</div><span class="cmd-tag">Page</span></a>
+          <a href="flights.html" class="cmd-result-item"><div class="cmd-result-left"><i class="bi bi-airplane text-danger"></i> Flight Management</div><span class="cmd-tag">Page</span></a>
+          <a href="live-status.html" class="cmd-result-item"><div class="cmd-result-left"><i class="bi bi-tv text-danger"></i> Live FIDS Wallboard Display</div><span class="cmd-tag">Screen</span></a>
+          <a href="service-requests.html" class="cmd-result-item"><div class="cmd-result-left"><i class="bi bi-file-earmark-text text-danger"></i> Service Requests</div><span class="cmd-tag">Page</span></a>
+          <a href="confirmations.html" class="cmd-result-item"><div class="cmd-result-left"><i class="bi bi-check2-circle text-danger"></i> Electronic Confirmations</div><span class="cmd-tag">Page</span></a>
+          <a href="invoices.html" class="cmd-result-item"><div class="cmd-result-left"><i class="bi bi-receipt text-danger"></i> Invoices & Billing</div><span class="cmd-tag">Page</span></a>
+          <a href="reports.html" class="cmd-result-item"><div class="cmd-result-left"><i class="bi bi-bar-chart-line text-danger"></i> Reports & SLA Analytics</div><span class="cmd-tag">Page</span></a>
+          <a href="documents.html" class="cmd-result-item"><div class="cmd-result-left"><i class="bi bi-folder text-danger"></i> Document Repository</div><span class="cmd-tag">Page</span></a>
+          <a href="administration.html" class="cmd-result-item"><div class="cmd-result-left"><i class="bi bi-gear text-danger"></i> Roles & Permissions</div><span class="cmd-tag">Admin</span></a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap 5.3 JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Application Logic -->
+  <script src="js/main.js"></script>
+</body>
+</html>
+
+
+
+
+
+

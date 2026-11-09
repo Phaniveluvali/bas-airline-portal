@@ -1,0 +1,28 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: static-web-ingress
+  namespace: bas
+  labels:
+    app: static-web
+    app.kubernetes.io/name: bas-airline-portal
+    app.kubernetes.io/managed-by: argocd
+  annotations:
+    ingress.kubernetes.io/ssl-redirect: "false"
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: tecnics-internal.online
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: static-web-service
+            port:
+              number: 80
+  tls:
+  - hosts:
+    - tecnics-internal.online
+    secretName: ca-vmx-tls-cert

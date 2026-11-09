@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bahrain Airport Services - Invoice Management</title>
+
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap 5.3 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <header class="top-navbar">
+    <!-- Left: Menu Button & Brand Logo -->
+    <div class="nav-left">
+      <button class="menu-toggle-btn" type="button" aria-label="Toggle navigation menu" title="Toggle Navigation">
+        <img src="images/menu-icon.jpg" alt="Menu">
+      </button>
+      <a href="dashboard.html" class="brand-logo-wrap">
+        <img src="images/bas-logo.jpg" alt="Bahrain Airport Services - خدمات مطار البحرين">
+      </a>
+    </div>
+
+    <!-- Center: Global Search Bar -->
+    <div class="nav-center">
+      <div class="global-search-container">
+        <span class="search-icon"><i class="bi bi-search"></i></span>
+        <input type="text" class="search-input" placeholder="Search flights, services, invoices, documents..." aria-label="Global Search">
+        <span class="search-shortcut">⌘ K</span>
+      </div>
+    </div>
+
+    <!-- Right: Notifications & User Profile -->
+    <div class="nav-right">
+            <!-- Ask AI Header Button -->
+      <button type="button" class="btn btn-danger text-white fw-bold d-flex align-items-center gap-2 me-3" style="border-radius: 20px; padding: 0.4rem 1rem; font-size: 0.85rem; border: none; box-shadow: 0 2px 4px rgba(239,68,68,0.2);" onclick="window.location.href = window.location.pathname.includes('admin') ? 'admin-ask-ai.html' : 'airline-ask-ai.html'">
+        <i class="bi bi-robot"></i> Ask AI
+      </button>
+
+      <button class="notification-bell-btn" type="button" aria-label="Notifications" title="12 new notifications" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNotifications">
+        <i class="bi bi-bell"></i>
+        <span class="notification-badge">12</span>
+      </button>
+
+      <!-- User Profile Dropdown -->
+      <div class="dropdown">
+        <div class="user-profile-menu dropdown-toggle" id="userProfileDropdown" data-bs-toggle="dropdown" aria-expanded="false" role="button" title="User Profile & Settings">
+          <div class="user-avatar">GF</div>
+          <div class="user-meta">
+            <span class="user-name">Gulf Air</span>
+            <span class="user-role">Operations Controller</span>
+          </div>
+          <i class="bi bi-chevron-down dropdown-arrow"></i>
+        </div>
+        <div class="dropdown-menu dropdown-menu-end profile-dropdown-menu border-0" aria-labelledby="userProfileDropdown">
+                    <div class="profile-dropdown-header">
+            <div class="avatar-lg" style="background-color: #0f172a;">GF</div>
+            <div>
+              <div class="user-title">Gulf Air Operations</div>
+              <div class="user-station-tag"><i class="bi bi-geo-alt-fill me-1"></i> BAH &bull; Airline Customer</div>
+            </div>
+          </div>
+                    <a class="dropdown-item" href="#"><i class="bi bi-person"></i> My Profile</a>
+          <a class="dropdown-item" href="#"><i class="bi bi-bell"></i> Notification Preferences</a>
+          <a class="dropdown-item" href="live-status.html"><i class="bi bi-tv"></i> Live FIDS Wallboard</a>
+          <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#commandPaletteModal"><i class="bi bi-search"></i> Quick Command Palette (?K)</a>
+          <hr class="dropdown-divider my-1">
+          <a class="dropdown-item text-danger" href="index.html"><i class="bi bi-box-arrow-right"></i> Sign Out</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- App Layout: Sidebar + Main Content -->
+  <div class="app-layout">
+    <!-- Sidebar Overlay for Mobile/Tablet -->
+    <div class="sidebar-overlay"></div>
+
+    <!-- Sidebar Navigation -->
+    <aside class="app-sidebar">
+      <div class="sidebar-content">
+        <ul class="sidebar-nav">
+          <li>
+            <a href="dashboard.html" class="nav-item-link">
+              <i class="bi bi-house-door"></i>
+              <span>Dashboard</span>
+            </a>
+          </li>
+          <li>
+            <a href="flights.html" class="nav-item-link">
+              <i class="bi bi-airplane"></i>
+              <span>Flights</span>
+            </a>
+          </li>
+          <li>
+            <a href="service-requests.html" class="nav-item-link">
+              <i class="bi bi-file-earmark-text"></i>
+              <span>Service Requests</span>
+            </a>
+          </li>
+          <li>
+            <a href="#offcanvasNotifications" class="nav-item-link" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNotifications" role="button" aria-controls="offcanvasNotifications" title="Open Notifications Drawer">
+              <i class="bi bi-bell"></i>
+              <span>Notifications</span>
+              <span class="nav-badge">5</span>
+            </a>
+          </li>
+          <li>
+            <a href="invoices.html" class="nav-item-link active">
+              <i class="bi bi-receipt"></i>
+              <span>Invoices</span>
+            </a>
+          </li>
+          <li>
+            <a href="reports.html" class="nav-item-link">
+              <i class="bi bi-bar-chart-line"></i>
+              <span>Reports</span>
+            </a>
+          </li>
+          <li>
+            <a href="documents.html" class="nav-item-link">
+              <i class="bi bi-folder"></i>
+              <span>Documents</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Watermark Airplane & Control Tower Graphic -->
+      <div class="sidebar-watermark">
+        <svg viewBox="0 0 260 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Contrail lines -->
+          <path d="M 0 210 C 50 200, 110 160, 175 105" stroke="#3b82f6" stroke-width="1.2" opacity="0.35"/>
+          <path d="M 0 215 C 65 205, 125 155, 185 100" stroke="#60a5fa" stroke-width="1.5" opacity="0.3"/>
+          <path d="M 5 220 C 75 210, 135 150, 192 95" stroke="#93c5fd" stroke-width="1.2" opacity="0.25"/>
+
+          <!-- Commercial airliner ascending diagonally -->
+          <g transform="translate(195, 95) rotate(-38) scale(0.52)" fill="#4b6b94" opacity="0.55">
+            <path d="M 0 -70 Q 7 -30 8 40 Q 8 65 0 75 Q -8 65 -8 40 Q -7 -30 0 -70 Z"/>
+            <ellipse cx="0" cy="-70" rx="3.5" ry="5"/>
+            <polygon points="0,-15 85,38 78,48 0,16 -78,48 -85,38 0,-15"/>
+            <rect x="22" y="10" width="6" height="15" rx="3" fill="#3b567d"/>
+            <rect x="-28" y="10" width="6" height="15" rx="3" fill="#3b567d"/>
+            <polygon points="0,52 38,72 34,78 0,66 -34,78 -38,72 0,52"/>
+          </g>
+
+          <!-- Airport Control Tower & Terminal Base -->
+          <g transform="translate(10, 140) scale(0.4)" fill="#334e72" opacity="0.35">
+            <rect x="15" y="40" width="16" height="70" rx="2"/>
+            <path d="M 10 40 L 36 40 L 31 20 L 15 20 Z"/>
+            <rect x="8" y="12" width="30" height="8" rx="2"/>
+            <rect x="21" y="0" width="4" height="12"/>
+            <path d="M 40 85 Q 90 60 140 85 L 140 110 L 40 110 Z"/>
+          </g>
+        </svg>
+      </div>
+
+      <!-- Sidebar Footer (Sign Out) -->
+      <div class="sidebar-footer">
+        <a href="index.html" class="signout-link" title="Sign out to Login">
+          <i class="bi bi-box-arrow-right"></i>
+          <span>Sign out</span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <!-- Page Header: Title, Subtitle, and Action Buttons -->
+      <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-3">
+        <div>
+          <h1 class="dashboard-heading mb-1">Invoice Management</h1>
+          <p class="text-secondary mb-0" style="font-size: 0.82rem;">
+            View invoices, supporting documents and delivery notes &bull; Read-only from BAS Finance
+          </p>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+          <button type="button" class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-2 fw-semibold px-3 py-2 bg-white" style="border-color: #e2e8f0; font-size: 0.8rem;">
+            <i class="bi bi-funnel"></i>
+            <span>Filters</span>
+          </button>
+          <button type="button" class="btn btn-danger btn-sm d-flex align-items-center gap-2 fw-semibold px-3 py-2 text-white" style="background-color: var(--primary-red); border-color: var(--primary-red); font-size: 0.8rem; box-shadow: 0 2px 6px rgba(228, 2, 33, 0.25);">
+            <i class="bi bi-download"></i>
+            <span>Export List</span>
+            <i class="bi bi-chevron-down ms-1" style="font-size: 0.72rem;"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- 4 KPI Summary Cards -->
+      <div class="row g-2 g-md-3 mb-3">
+        <!-- Card 1: Outstanding -->
+        <div class="col-6 col-xl-3">
+          <div class="invoice-kpi-card">
+            <div class="invoice-kpi-top">
+              <div class="invoice-kpi-icon red">
+                <i class="bi bi-file-earmark-text"></i>
+              </div>
+              <div class="invoice-kpi-trend red">
+                <i class="bi bi-arrow-up"></i>
+                <span>12%</span>
+                <span class="vs-text">vs last month</span>
+              </div>
+            </div>
+            <div class="invoice-kpi-body">
+              <div class="invoice-kpi-label">OUTSTANDING</div>
+              <div class="invoice-kpi-value">BHD 84,250</div>
+              <div class="invoice-kpi-subtext">12 invoices</div>
+            </div>
+            <div id="sparkline-inv-out" class="invoice-kpi-chart"></div>
+          </div>
+        </div>
+
+        <!-- Card 2: Paid (MTD) -->
+        <div class="col-6 col-xl-3">
+          <div class="invoice-kpi-card">
+            <div class="invoice-kpi-top">
+              <div class="invoice-kpi-icon green">
+                <i class="bi bi-check2-circle"></i>
+              </div>
+              <div class="invoice-kpi-trend green">
+                <i class="bi bi-arrow-up"></i>
+                <span>8%</span>
+                <span class="vs-text">vs last month</span>
+              </div>
+            </div>
+            <div class="invoice-kpi-body">
+              <div class="invoice-kpi-label">PAID (MTD)</div>
+              <div class="invoice-kpi-value">BHD 512,800</div>
+              <div class="invoice-kpi-subtext">24 invoices</div>
+            </div>
+            <div id="sparkline-inv-paid" class="invoice-kpi-chart"></div>
+          </div>
+        </div>
+
+        <!-- Card 3: Overdue -->
+        <div class="col-6 col-xl-3">
+          <div class="invoice-kpi-card">
+            <div class="invoice-kpi-top">
+              <div class="invoice-kpi-icon amber">
+                <i class="bi bi-exclamation-triangle-fill"></i>
+              </div>
+              <div class="invoice-kpi-trend red">
+                <i class="bi bi-arrow-down"></i>
+                <span>2%</span>
+                <span class="vs-text">vs last month</span>
+              </div>
+            </div>
+            <div class="invoice-kpi-body">
+              <div class="invoice-kpi-label">OVERDUE</div>
+              <div class="invoice-kpi-value">BHD 12,400</div>
+              <div class="invoice-kpi-subtext">2 invoices</div>
+            </div>
+            <div id="sparkline-inv-overdue" class="invoice-kpi-chart"></div>
+          </div>
+        </div>
+
+        <!-- Card 4: This Month -->
+        <div class="col-6 col-xl-3">
+          <div class="invoice-kpi-card">
+            <div class="invoice-kpi-top">
+              <div class="invoice-kpi-icon blue">
+                <i class="bi bi-list-ul"></i>
+              </div>
+            </div>
+            <div class="invoice-kpi-body">
+              <div class="invoice-kpi-label">THIS MONTH</div>
+              <div class="invoice-kpi-value">38 invoices</div>
+              <div class="invoice-kpi-subtext">
+                <span class="text-success fw-semibold"><i class="bi bi-arrow-up"></i> 5</span>
+                <span class="ms-1">vs last month</span>
+              </div>
+            </div>
+            <div id="sparkline-inv-month" class="invoice-kpi-chart"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filter & Search Toolbar -->
+      <div class="invoice-toolbar-card mb-3">
+        <div class="d-flex align-items-center flex-wrap gap-2">
+          <!-- Search input -->
+          <div class="invoice-search-box">
+            <i class="bi bi-search"></i>
+            <input type="text" class="invoice-search-input" placeholder="Search invoice number or period...">
+          </div>
+
+          <!-- Status filter pills -->
+          <div class="invoice-pills-wrap ms-md-2">
+            <button type="button" class="filter-pill active">All</button>
+            <button type="button" class="filter-pill">Paid</button>
+            <button type="button" class="filter-pill">Outstanding</button>
+            <button type="button" class="filter-pill">Overdue</button>
+          </div>
+        </div>
+
+        <!-- Date range picker -->
+        <div>
+          <button type="button" class="btn-invoice-date">
+            <i class="bi bi-calendar3"></i>
+            <span>Jul – Aug 2026</span>
+            <i class="bi bi-chevron-down ms-1" style="font-size: 0.72rem;"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Invoices Data Table Card -->
+      <div class="content-card mb-3 p-0 overflow-hidden">
+        <div class="flights-table-wrap">
+          <table class="flights-table mb-0">
+            <thead>
+              <tr>
+                <th style="padding-left: 1.5rem;">INVOICE #</th>
+                <th>PERIOD</th>
+                <th>FLIGHTS</th>
+                <th>DELIVERY NOTES</th>
+                <th>AMOUNT (BHD)</th>
+                <th>STATUS</th>
+                <th style="padding-right: 1.5rem;">ACTIONS</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Row 1 -->
+              <tr>
+                <td style="padding-left: 1.5rem;">
+                  <span class="invoice-number-text">INV-2026-0812</span>
+                </td>
+                <td class="text-secondary">01–15 Jul 2026</td>
+                <td class="fw-semibold">64</td>
+                <td class="text-secondary">GHS-DN-1180</td>
+                <td class="fw-bold">48,900.000</td>
+                <td><span class="status-badge-paid">Paid</span></td>
+                <td style="padding-right: 1.5rem;">
+                  <div class="table-actions-cell">
+                    <button type="button" class="action-icon-btn" title="Download"><i class="bi bi-download"></i></button>
+                    <button type="button" class="action-icon-btn" title="Print"><i class="bi bi-printer"></i></button>
+                    <button type="button" class="action-icon-btn" title="Email"><i class="bi bi-envelope"></i></button>
+                    <a href="invoice-details.html" class="action-icon-btn d-inline-flex align-items-center justify-content-center text-decoration-none" title="View"><i class="bi bi-eye"></i></a>
+                    <button type="button" class="action-icon-btn" title="More options"><i class="bi bi-three-dots-vertical"></i></button>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Row 2 -->
+              <tr>
+                <td style="padding-left: 1.5rem;">
+                  <span class="invoice-number-text">INV-2026-0798</span>
+                </td>
+                <td class="text-secondary">16–30 Jun 2026</td>
+                <td class="fw-semibold">58</td>
+                <td class="text-secondary">GHS-DN-1142</td>
+                <td class="fw-bold">44,320.000</td>
+                <td><span class="status-badge-paid">Paid</span></td>
+                <td style="padding-right: 1.5rem;">
+                  <div class="table-actions-cell">
+                    <button type="button" class="action-icon-btn" title="Download"><i class="bi bi-download"></i></button>
+                    <button type="button" class="action-icon-btn" title="Print"><i class="bi bi-printer"></i></button>
+                    <button type="button" class="action-icon-btn" title="Email"><i class="bi bi-envelope"></i></button>
+                    <a href="invoice-details.html" class="action-icon-btn d-inline-flex align-items-center justify-content-center text-decoration-none" title="View"><i class="bi bi-eye"></i></a>
+                    <button type="button" class="action-icon-btn" title="More options"><i class="bi bi-three-dots-vertical"></i></button>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Row 3 -->
+              <tr>
+                <td style="padding-left: 1.5rem;">
+                  <span class="invoice-number-text">INV-2026-0821</span>
+                </td>
+                <td class="text-secondary">16–31 Jul 2026</td>
+                <td class="fw-semibold">71</td>
+                <td class="text-secondary">GHS-DN-1206</td>
+                <td class="fw-bold">52,180.000</td>
+                <td><span class="status-badge-outstanding">Outstanding</span></td>
+                <td style="padding-right: 1.5rem;">
+                  <div class="table-actions-cell">
+                    <button type="button" class="action-icon-btn" title="Download"><i class="bi bi-download"></i></button>
+                    <button type="button" class="action-icon-btn" title="Print"><i class="bi bi-printer"></i></button>
+                    <button type="button" class="action-icon-btn" title="Email"><i class="bi bi-envelope"></i></button>
+                    <a href="invoice-details.html" class="action-icon-btn d-inline-flex align-items-center justify-content-center text-decoration-none" title="View"><i class="bi bi-eye"></i></a>
+                    <button type="button" class="action-icon-btn" title="More options"><i class="bi bi-three-dots-vertical"></i></button>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Row 4 -->
+              <tr>
+                <td style="padding-left: 1.5rem;">
+                  <span class="invoice-number-text">INV-2026-0805</span>
+                </td>
+                <td class="text-secondary">01–15 Jun 2026</td>
+                <td class="fw-semibold">61</td>
+                <td class="text-secondary">GHS-DN-1119</td>
+                <td class="fw-bold">46,050.000</td>
+                <td><span class="status-badge-paid">Paid</span></td>
+                <td style="padding-right: 1.5rem;">
+                  <div class="table-actions-cell">
+                    <button type="button" class="action-icon-btn" title="Download"><i class="bi bi-download"></i></button>
+                    <button type="button" class="action-icon-btn" title="Print"><i class="bi bi-printer"></i></button>
+                    <button type="button" class="action-icon-btn" title="Email"><i class="bi bi-envelope"></i></button>
+                    <a href="invoice-details.html" class="action-icon-btn d-inline-flex align-items-center justify-content-center text-decoration-none" title="View"><i class="bi bi-eye"></i></a>
+                    <button type="button" class="action-icon-btn" title="More options"><i class="bi bi-three-dots-vertical"></i></button>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Row 5 -->
+              <tr>
+                <td style="padding-left: 1.5rem;">
+                  <span class="invoice-number-text">INV-2026-0788</span>
+                </td>
+                <td class="text-secondary">16–31 May 2026</td>
+                <td class="fw-semibold">55</td>
+                <td class="text-secondary">GHS-DN-1088</td>
+                <td class="fw-bold">41,720.000</td>
+                <td><span class="status-badge-overdue">Overdue</span></td>
+                <td style="padding-right: 1.5rem;">
+                  <div class="table-actions-cell">
+                    <button type="button" class="action-icon-btn" title="Download"><i class="bi bi-download"></i></button>
+                    <button type="button" class="action-icon-btn" title="Print"><i class="bi bi-printer"></i></button>
+                    <button type="button" class="action-icon-btn" title="Email"><i class="bi bi-envelope"></i></button>
+                    <a href="invoice-details.html" class="action-icon-btn d-inline-flex align-items-center justify-content-center text-decoration-none" title="View"><i class="bi bi-eye"></i></a>
+                    <button type="button" class="action-icon-btn" title="More options"><i class="bi bi-three-dots-vertical"></i></button>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Row 6 -->
+              <tr>
+                <td style="padding-left: 1.5rem;">
+                  <span class="invoice-number-text">INV-2026-0832</span>
+                </td>
+                <td class="text-secondary">01–03 Aug 2026</td>
+                <td class="fw-semibold">18</td>
+                <td class="text-secondary">GHS-DN-1231</td>
+                <td class="fw-bold">12,070.000</td>
+                <td><span class="status-badge-outstanding">Outstanding</span></td>
+                <td style="padding-right: 1.5rem;">
+                  <div class="table-actions-cell">
+                    <button type="button" class="action-icon-btn" title="Download"><i class="bi bi-download"></i></button>
+                    <button type="button" class="action-icon-btn" title="Print"><i class="bi bi-printer"></i></button>
+                    <button type="button" class="action-icon-btn" title="Email"><i class="bi bi-envelope"></i></button>
+                    <a href="invoice-details.html" class="action-icon-btn d-inline-flex align-items-center justify-content-center text-decoration-none" title="View"><i class="bi bi-eye"></i></a>
+                    <button type="button" class="action-icon-btn" title="More options"><i class="bi bi-three-dots-vertical"></i></button>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Row 7 -->
+              <tr>
+                <td style="padding-left: 1.5rem;">
+                  <span class="invoice-number-text">INV-2026-0774</span>
+                </td>
+                <td class="text-secondary">01–15 May 2026</td>
+                <td class="fw-semibold">59</td>
+                <td class="text-secondary">GHS-DN-1051</td>
+                <td class="fw-bold">43,900.000</td>
+                <td><span class="status-badge-paid">Paid</span></td>
+                <td style="padding-right: 1.5rem;">
+                  <div class="table-actions-cell">
+                    <button type="button" class="action-icon-btn" title="Download"><i class="bi bi-download"></i></button>
+                    <button type="button" class="action-icon-btn" title="Print"><i class="bi bi-printer"></i></button>
+                    <button type="button" class="action-icon-btn" title="Email"><i class="bi bi-envelope"></i></button>
+                    <a href="invoice-details.html" class="action-icon-btn d-inline-flex align-items-center justify-content-center text-decoration-none" title="View"><i class="bi bi-eye"></i></a>
+                    <button type="button" class="action-icon-btn" title="More options"><i class="bi bi-three-dots-vertical"></i></button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Table Footer / Pagination -->
+        <div class="table-pagination-footer" style="padding: 1rem 1.5rem;">
+          <div class="d-flex align-items-center gap-2 text-secondary" style="font-size: 0.76rem;">
+            <span>Showing 7 of 38 invoices</span>
+            <span>&bull;</span>
+            <span class="d-flex align-items-center gap-1">
+              Amounts read-only from BAS Finance (no recalculation)
+              <i class="bi bi-info-circle text-muted" style="font-size: 0.8rem;"></i>
+            </span>
+          </div>
+
+          <div class="pagination-controls">
+            <button type="button" class="page-btn" aria-label="Previous page"><i class="bi bi-chevron-left"></i></button>
+            <button type="button" class="page-btn active">1</button>
+            <button type="button" class="page-btn">2</button>
+            <button type="button" class="page-btn">3</button>
+            <span class="page-dots">&hellip;</span>
+            <button type="button" class="page-btn">6</button>
+            <button type="button" class="page-btn" aria-label="Next page"><i class="bi bi-chevron-right"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Widgets Grid: Top Overdue, Aging Summary, Quick Actions -->
+      <div class="row g-3">
+        <!-- Col 1: Top Overdue Invoices -->
+        <div class="col-xl-4 col-lg-4">
+          <div class="content-card h-100">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+              <div class="d-flex align-items-center gap-2">
+                <i class="bi bi-exclamation-triangle-fill text-danger fs-6"></i>
+                <h6 class="mb-0 fw-bold" style="font-size: 0.88rem; color: #0f172a;">Top Overdue Invoices</h6>
+              </div>
+              <a href="#" class="view-all-red">View all</a>
+            </div>
+
+            <div class="overdue-invoices-list">
+              <div class="overdue-invoice-item">
+                <span class="overdue-inv-num">INV-2026-0788</span>
+                <span class="overdue-inv-period">16–31 May 2026</span>
+                <span class="overdue-inv-amount">BHD 41,720.000</span>
+              </div>
+              <div class="overdue-invoice-item">
+                <span class="overdue-inv-num">INV-2026-0761</span>
+                <span class="overdue-inv-period">01–15 Apr 2026</span>
+                <span class="overdue-inv-amount">BHD 31,600.000</span>
+              </div>
+              <div class="overdue-invoice-item">
+                <span class="overdue-inv-num">INV-2026-0742</span>
+                <span class="overdue-inv-period">16–30 Mar 2026</span>
+                <span class="overdue-inv-amount">BHD 22,480.000</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Col 2: Aging Summary -->
+        <div class="col-xl-5 col-lg-5">
+          <div class="content-card h-100">
+            <h6 class="mb-3 fw-bold" style="font-size: 0.88rem; color: #0f172a;">Aging Summary</h6>
+
+            <div class="aging-buckets-grid">
+              <!-- Bucket 1: 0-30 Days -->
+              <div class="aging-bucket-card">
+                <span class="aging-tag green">0–30 Days</span>
+                <div class="aging-count">0</div>
+                <div class="aging-amount green">BHD 0</div>
+              </div>
+
+              <!-- Bucket 2: 31-60 Days -->
+              <div class="aging-bucket-card">
+                <span class="aging-tag blue">31–60 Days</span>
+                <div class="aging-count">1</div>
+                <div class="aging-amount blue">BHD 12,070</div>
+              </div>
+
+              <!-- Bucket 3: 61-90 Days -->
+              <div class="aging-bucket-card">
+                <span class="aging-tag amber">61–90 Days</span>
+                <div class="aging-count">1</div>
+                <div class="aging-amount amber">BHD 41,720</div>
+              </div>
+
+              <!-- Bucket 4: 90+ Days -->
+              <div class="aging-bucket-card">
+                <span class="aging-tag red">90+ Days</span>
+                <div class="aging-count">0</div>
+                <div class="aging-amount red">BHD 0</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Col 3: Quick Actions -->
+        <div class="col-xl-3 col-lg-3">
+          <div class="content-card h-100">
+            <h6 class="mb-3 fw-bold" style="font-size: 0.88rem; color: #0f172a;">Quick Actions</h6>
+
+            <div class="quick-actions-list">
+              <a href="#" class="quick-action-card">
+                <div class="quick-action-icon pdf">
+                  <i class="bi bi-file-earmark-pdf"></i>
+                </div>
+                <div class="quick-action-meta">
+                  <span class="quick-action-title">Download all (PDF)</span>
+                  <span class="quick-action-sub">Export all invoices as PDF</span>
+                </div>
+              </a>
+
+              <a href="#" class="quick-action-card">
+                <div class="quick-action-icon excel">
+                  <i class="bi bi-file-earmark-excel"></i>
+                </div>
+                <div class="quick-action-meta">
+                  <span class="quick-action-title">Export (Excel)</span>
+                  <span class="quick-action-sub">Download invoice list in Excel</span>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Portal Legal Footer -->
+      <footer class="portal-site-footer">
+        <div>&copy; 2026 Bahrain Airport Services (BAS). All rights reserved. Proprietary &amp; Confidential.</div>
+        <div class="portal-footer-links">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+          <a href="#">Support</a>
+          <a href="#">API Docs</a>
+        </div>
+      </footer>
+    </main>
+  </div>
+
+  <!-- Offcanvas Notifications Drawer -->
+  <div class="offcanvas offcanvas-end offcanvas-notifications" tabindex="-1" id="offcanvasNotifications" aria-labelledby="offcanvasNotifLabel">
+    <div class="offcanvas-header border-bottom py-3">
+      <div>
+        <h5 class="offcanvas-title fw-bold fs-6 text-dark m-0" id="offcanvasNotifLabel">
+          <i class="bi bi-bell-fill text-danger me-2"></i> Operational Notifications
+        </h5>
+        <small class="text-muted">Live Airside Ground Handling Telemetry</small>
+      </div>
+      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="notif-tab-nav">
+      <button type="button" class="notif-tab-btn active" data-notif-filter="all">All (12)</button>
+      <button type="button" class="notif-tab-btn" data-notif-filter="ops">Airside (5)</button>
+      <button type="button" class="notif-tab-btn" data-notif-filter="confirm">Confirmations (4)</button>
+      <button type="button" class="notif-tab-btn" data-notif-filter="billing">Billing (3)</button>
+    </div>
+    <div class="offcanvas-body p-0" style="overflow-y: auto;">
+      <a href="live-status.html" class="notif-item unread" data-category="ops">
+        <div class="notif-avatar red"><i class="bi bi-airplane-fill"></i></div>
+        <div class="flex-grow-1">
+          <div class="notif-title-row">
+            <span class="notif-title">Flight GF 504 In Progress</span>
+            <span class="notif-time">Just now</span>
+          </div>
+          <p class="notif-snippet">Ramp turnaround commenced at Stand G03. Fueling & baggage loading active.</p>
+        </div>
+      </a>
+      <a href="invoices.html" class="notif-item unread" data-category="billing">
+        <div class="notif-avatar orange"><i class="bi bi-receipt"></i></div>
+        <div class="flex-grow-1">
+          <div class="notif-title-row">
+            <span class="notif-title">Invoice BAS-2026-0889 Generated</span>
+            <span class="notif-time">45m ago</span>
+          </div>
+          <p class="notif-snippet">Proforma invoice for GF 504 turn charges issued for e-billing review.</p>
+        </div>
+      </a>
+      <a href="confirmations.html" class="notif-item unread" data-category="confirm">
+        <div class="notif-avatar blue"><i class="bi bi-check2-circle"></i></div>
+        <div class="flex-grow-1">
+          <div class="notif-title-row">
+            <span class="notif-title">Electronic Sign-Off Required</span>
+            <span class="notif-time">10m ago</span>
+          </div>
+          <p class="notif-snippet">Flight GF 152 departure handling finalized. Captain signature pending.</p>
+        </div>
+      </a>
+    </div>
+          <div class="p-3 border-top bg-light text-center">
+        <a href="notifications.html" class="btn btn-outline-secondary btn-sm w-100 fw-semibold">
+          View All Notifications
+        </a>
+      </div>
+  </div>
+
+  <!-- Command Palette / Global Search Modal (⌘K) -->
+  <div class="modal fade" id="commandPaletteModal" tabindex="-1" aria-labelledby="cmdPaletteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content border-0 shadow-lg" style="border-radius: 16px; overflow: hidden;">
+        <div class="cmd-search-input-wrap bg-white">
+          <i class="bi bi-search text-danger"></i>
+          <input type="text" id="cmdPaletteSearchInput" class="cmd-search-input" placeholder="Type a flight, service, invoice, or page..." autocomplete="off">
+          <span class="badge bg-light text-secondary border">ESC to close</span>
+        </div>
+        <div class="cmd-results-body bg-white">
+          <div class="cmd-category-title">Portal Navigation</div>
+          <a href="dashboard.html" class="cmd-result-item"><div class="cmd-result-left"><i class="bi bi-house-door text-danger"></i> Operational Dashboard</div><span class="cmd-tag">Page</span></a>
+          <a href="flights.html" class="cmd-result-item"><div class="cmd-result-left"><i class="bi bi-airplane text-danger"></i> Flight Management</div><span class="cmd-tag">Page</span></a>
+          <a href="live-status.html" class="cmd-result-item"><div class="cmd-result-left"><i class="bi bi-tv text-danger"></i> Live FIDS Wallboard Display</div><span class="cmd-tag">Screen</span></a>
+          <a href="service-requests.html" class="cmd-result-item"><div class="cmd-result-left"><i class="bi bi-file-earmark-text text-danger"></i> Service Requests</div><span class="cmd-tag">Page</span></a>
+          <a href="confirmations.html" class="cmd-result-item"><div class="cmd-result-left"><i class="bi bi-check2-circle text-danger"></i> Electronic Confirmations</div><span class="cmd-tag">Page</span></a>
+          <a href="invoices.html" class="cmd-result-item"><div class="cmd-result-left"><i class="bi bi-receipt text-danger"></i> Invoices & Billing</div><span class="cmd-tag">Page</span></a>
+          <a href="reports.html" class="cmd-result-item"><div class="cmd-result-left"><i class="bi bi-bar-chart-line text-danger"></i> Reports & SLA Analytics</div><span class="cmd-tag">Page</span></a>
+          <a href="documents.html" class="cmd-result-item"><div class="cmd-result-left"><i class="bi bi-folder text-danger"></i> Document Repository</div><span class="cmd-tag">Page</span></a>
+          <a href="administration.html" class="cmd-result-item"><div class="cmd-result-left"><i class="bi bi-gear text-danger"></i> Roles & Permissions</div><span class="cmd-tag">Admin</span></a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts: Bootstrap Bundle & Highcharts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/highcharts.js"></script>
+  <script src="js/accessibility.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+

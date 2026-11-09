@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bahrain Airport Services - Operational Dashboard</title>
+
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap 5.3 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <!-- Highcharts Scripts (Local & CDN Fallback) -->
+  <script src="js/highcharts.js"></script>
+  <script src="js/accessibility.js"></script>
+
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <header class="top-navbar">
+    <!-- Left: Menu Button & Brand Logo -->
+    <div class="nav-left">
+      <button class="menu-toggle-btn" type="button" aria-label="Toggle navigation menu" title="Toggle Navigation">
+        <img src="images/menu-icon.jpg" alt="Menu">
+      </button>
+      <a href="#" class="brand-logo-wrap">
+        <img src="images/bas-logo.jpg" alt="Bahrain Airport Services - خدمات مطار البحرين">
+      </a>
+    </div>
+
+    <!-- Center: Global Search Bar -->
+    <div class="nav-center">
+      <div class="global-search-container">
+        <span class="search-icon"><i class="bi bi-search"></i></span>
+        <input type="text" class="search-input" placeholder="Search flights, services, invoices, documents..." aria-label="Global Search">
+        <span class="search-shortcut">⌘ K</span>
+      </div>
+    </div>
+
+    <!-- Right: Notifications & User Profile -->
+    <div class="nav-right">
+            <!-- Ask AI Header Button -->
+      <button type="button" class="btn btn-danger text-white fw-bold d-flex align-items-center gap-2 me-3" style="border-radius: 20px; padding: 0.4rem 1rem; font-size: 0.85rem; border: none; box-shadow: 0 2px 4px rgba(239,68,68,0.2);" onclick="window.location.href = window.location.pathname.includes('admin') ? 'admin-ask-ai.html' : 'airline-ask-ai.html'">
+        <i class="bi bi-robot"></i> Ask AI
+      </button>
+
+      <button class="notification-bell-btn" type="button" aria-label="Notifications" title="12 new notifications" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNotifications">
+        <i class="bi bi-bell"></i>
+        <span class="notification-badge">12</span>
+      </button>
+
+      <!-- User Profile Dropdown -->
+      <div class="dropdown">
+        <div class="user-profile-menu dropdown-toggle" id="userProfileDropdown" data-bs-toggle="dropdown" aria-expanded="false" role="button" title="User Profile & Settings">
+          <div class="user-avatar">GF</div>
+          <div class="user-meta">
+            <span class="user-name">Gulf Air Ops</span>
+            <span class="user-role">Operations Controller</span>
+          </div>
+          <i class="bi bi-chevron-down dropdown-arrow"></i>
+        </div>
+        <div class="dropdown-menu dropdown-menu-end profile-dropdown-menu border-0" aria-labelledby="userProfileDropdown">
+                    <div class="profile-dropdown-header">
+            <div class="avatar-lg" style="background-color: #0f172a;">GF</div>
+            <div>
+              <div class="user-title">Gulf Air Operations</div>
+              <div class="user-station-tag"><i class="bi bi-geo-alt-fill me-1"></i> BAH &bull; Airline Customer</div>
+            </div>
+          </div>
+                    <a class="dropdown-item" href="#"><i class="bi bi-person"></i> My Profile</a>
+          <a class="dropdown-item" href="#"><i class="bi bi-bell"></i> Notification Preferences</a>
+          <a class="dropdown-item" href="live-status.html"><i class="bi bi-tv"></i> Live FIDS Wallboard</a>
+          <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#commandPaletteModal"><i class="bi bi-search"></i> Quick Command Palette (?K)</a>
+          <hr class="dropdown-divider my-1">
+          <a class="dropdown-item text-danger" href="index.html"><i class="bi bi-box-arrow-right"></i> Sign Out</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- App Layout: Sidebar + Main Content -->
+  <div class="app-layout">
+    <!-- Sidebar Overlay for Mobile/Tablet -->
+    <div class="sidebar-overlay"></div>
+
+    <!-- Sidebar Navigation -->
+    <aside class="app-sidebar">
+      <div class="sidebar-content">
+        <ul class="sidebar-nav">
+          <li>
+            <a href="dashboard.html" class="nav-item-link active">
+              <i class="bi bi-house-door-fill"></i>
+              <span>Dashboard</span>
+            </a>
+          </li>
+          <li>
+            <a href="flights.html" class="nav-item-link">
+              <i class="bi bi-airplane"></i>
+              <span>Flights</span>
+            </a>
+          </li>
+          <li>
+            <a href="service-requests.html" class="nav-item-link">
+              <i class="bi bi-file-earmark-text"></i>
+              <span>Service Requests</span>
+            </a>
+          </li>
+          <li>
+            <a href="#offcanvasNotifications" class="nav-item-link" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNotifications" role="button" aria-controls="offcanvasNotifications" title="Open Notifications Drawer">
+              <i class="bi bi-bell"></i>
+              <span>Notifications</span>
+              <span class="nav-badge">5</span>
+            </a>
+          </li>
+          <li>
+            <a href="invoices.html" class="nav-item-link">
+              <i class="bi bi-receipt"></i>
+              <span>Invoices</span>
+            </a>
+          </li>
+          <li>
+            <a href="reports.html" class="nav-item-link">
+              <i class="bi bi-bar-chart-line"></i>
+              <span>Reports</span>
+            </a>
+          </li>
+          <li>
+            <a href="documents.html" class="nav-item-link">
+              <i class="bi bi-folder"></i>
+              <span>Documents</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Watermark Airplane Background Illustration (Matching Mockup) -->
+      <div class="sidebar-watermark">
+        <svg viewBox="0 0 260 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Flowing Contrail Streams fanning out from bottom left to aircraft -->
+          <path d="M 0 210 C 50 200, 110 160, 175 105" stroke="#3b82f6" stroke-width="1.2" opacity="0.35"/>
+          <path d="M 0 215 C 65 205, 125 155, 185 100" stroke="#60a5fa" stroke-width="1.5" opacity="0.3"/>
+          <path d="M 5 220 C 75 210, 135 150, 192 95" stroke="#93c5fd" stroke-width="1.2" opacity="0.25"/>
+          <path d="M 15 225 C 85 215, 145 145, 200 90" stroke="#bfdbfe" stroke-width="0.8" opacity="0.2"/>
+
+          <!-- Commercial airliner ascending diagonally towards upper right -->
+          <g transform="translate(195, 95) rotate(-38) scale(0.52)" fill="#4b6b94" opacity="0.55">
+            <!-- Main Body (Fuselage) -->
+            <path d="M 0 -70 Q 7 -30 8 40 Q 8 65 0 75 Q -8 65 -8 40 Q -7 -30 0 -70 Z"/>
+            <!-- Cockpit nose -->
+            <ellipse cx="0" cy="-70" rx="3.5" ry="5"/>
+            <!-- Main Swept Wings -->
+            <polygon points="0,-15 85,38 78,48 0,16 -78,48 -85,38 0,-15"/>
+            <!-- Engines under wings -->
+            <rect x="22" y="10" width="6" height="15" rx="3" fill="#3b567d"/>
+            <rect x="-28" y="10" width="6" height="15" rx="3" fill="#3b567d"/>
+            <!-- Horizontal Stabilizers -->
+            <polygon points="0,52 38,72 34,78 0,66 -34,78 -38,72 0,52"/>
+          </g>
+        </svg>
+      </div>
+
+      <!-- Sidebar Footer (Sign Out) -->
+      <div class="sidebar-footer">
+        <a href="index.html" class="signout-link" title="Sign out to Login">
+          <i class="bi bi-box-arrow-right"></i>
+          <span>Sign out</span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Dashboard Content -->
+    <main class="main-content">
+      <!-- Title & Live Meta Header -->
+      <div class="dashboard-header-wrap">
+        <div>
+          <h1 class="dashboard-heading">Operational Dashboard</h1>
+          <div class="dashboard-submeta">
+            <span>Live view</span>
+            <span class="meta-dot">•</span>
+            <span>Bahrain International Airport</span>
+            <span class="meta-dot">•</span>
+            <span>Today, 04 Aug 2026</span>
+            <span class="meta-divider">|</span>
+            <span>10:30 AST</span>
+          </div>
+        </div>
+
+        <div class="dashboard-actions">
+          <a href="live-status.html" class="btn-live-wallboard" title="Open Live Airside Wallboard / FIDS Display">
+            <i class="bi bi-broadcast"></i>
+            <span>Live FIDS Wallboard</span>
+            <span class="badge-live">LIVE</span>
+          </a>
+          <!-- Date Range Filter Dropdown -->
+          <div class="dropdown">
+            <button type="button" class="btn-today-filter dropdown-toggle" id="dateFilterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-calendar3"></i>
+              <span id="current-date-filter-label">Today</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end date-filter-dropdown border-0" aria-labelledby="dateFilterDropdown">
+              <li class="dropdown-header small text-uppercase fw-bold text-muted px-3 py-1">Time Horizon</li>
+              <li><a class="dropdown-item active d-flex align-items-center justify-content-between" href="#" data-range="today"><span><i class="bi bi-calendar-check me-2 text-danger"></i> Today (04 Aug 2026)</span><i class="bi bi-check2"></i></a></li>
+              <li><a class="dropdown-item d-flex align-items-center justify-content-between" href="#" data-range="yesterday"><span><i class="bi bi-calendar-event me-2 text-muted"></i> Yesterday (03 Aug 2026)</span></a></li>
+              <li><a class="dropdown-item d-flex align-items-center justify-content-between" href="#" data-range="last7"><span><i class="bi bi-calendar-range me-2 text-muted"></i> Last 7 Days</span></a></li>
+              <li><a class="dropdown-item d-flex align-items-center justify-content-between" href="#" data-range="last30"><span><i class="bi bi-calendar3-range me-2 text-muted"></i> Last 30 Days</span></a></li>
+              <li><a class="dropdown-item d-flex align-items-center justify-content-between" href="#" data-range="month"><span><i class="bi bi-calendar-month me-2 text-muted"></i> This Month (August 2026)</span></a></li>
+              <li><hr class="dropdown-divider my-1"></li>
+              <li><a class="dropdown-item d-flex align-items-center justify-content-between" href="#" data-range="custom"><span><i class="bi bi-sliders me-2 text-muted"></i> Custom Range...</span></a></li>
+            </ul>
+          </div>
+
+          <!-- Export Actions Dropdown -->
+          <div class="dropdown">
+            <button type="button" class="btn-export-primary dropdown-toggle" id="exportDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-download"></i>
+              <span>Export</span>
+              <i class="bi bi-chevron-down ms-1" style="font-size: 0.7rem;"></i>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end export-dropdown border-0" aria-labelledby="exportDropdown">
+              <li class="dropdown-header small text-uppercase fw-bold text-muted px-3 py-1">Export Telemetry & Briefings</li>
+              <li><a class="dropdown-item export-action-btn d-flex align-items-center gap-2 py-2" href="#" data-format="excel"><i class="bi bi-file-earmark-excel text-success fs-5"></i><div><div class="fw-semibold text-dark">Excel Flight Manifest (.xlsx)</div><small class="text-muted">Turnaround timestamps, stand allocation, delay codes</small></div></a></li>
+              <li><a class="dropdown-item export-action-btn d-flex align-items-center gap-2 py-2" href="#" data-format="pdf"><i class="bi bi-file-earmark-pdf text-danger fs-5"></i><div><div class="fw-semibold text-dark">Official OCC Daily Briefing (.pdf)</div><small class="text-muted">Executive summary with SLA graphs and audit certification</small></div></a></li>
+              <li><a class="dropdown-item export-action-btn d-flex align-items-center gap-2 py-2" href="#" data-format="csv"><i class="bi bi-file-earmark-spreadsheet text-primary fs-5"></i><div><div class="fw-semibold text-dark">Raw Telemetry Data (.csv)</div><small class="text-muted">High-frequency ground handling telemetry feed</small></div></a></li>
+              <li><hr class="dropdown-divider my-1"></li>
+              <li><a class="dropdown-item export-action-btn d-flex align-items-center gap-2 py-2" href="#" data-format="print"><i class="bi bi-printer text-secondary fs-5"></i><div><div class="fw-semibold text-dark">Print OCC Ramp Dispatch Log</div><small class="text-muted">Direct airside printer queue format</small></div></a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Top KPI Metric Cards (4 Cards) -->
+      <div class="row g-3 kpi-row">
+        <!-- KPI 1: Today's Flights -->
+        <div class="col-6 col-xl-3">
+          <div class="kpi-card">
+            <div class="kpi-top">
+              <div class="kpi-icon-box red">
+                <i class="bi bi-airplane"></i>
+              </div>
+              <div class="kpi-info">
+                <span class="kpi-label">Today's Flights</span>
+                <span class="kpi-value">148</span>
+              </div>
+            </div>
+            <div class="kpi-bottom">
+              <div class="kpi-trend">
+                vs yesterday <span class="trend-up">↑ 6%</span>
+              </div>
+              <div id="sparkline-flights" class="kpi-sparkline"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- KPI 2: In Progress -->
+        <div class="col-6 col-xl-3">
+          <div class="kpi-card">
+            <div class="kpi-top">
+              <div class="kpi-icon-box blue">
+                <i class="bi bi-clock"></i>
+              </div>
+              <div class="kpi-info">
+                <span class="kpi-label">In Progress</span>
+                <span class="kpi-value">23</span>
+              </div>
+            </div>
+            <div class="kpi-bottom">
+              <div class="kpi-trend">
+                vs yesterday <span class="trend-live">↑ Live</span>
+              </div>
+              <div id="sparkline-inprogress" class="kpi-sparkline"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- KPI 3: Delayed / Cancelled -->
+        <div class="col-6 col-xl-3">
+          <div class="kpi-card">
+            <div class="kpi-top">
+              <div class="kpi-icon-box amber">
+                <i class="bi bi-exclamation-triangle"></i>
+              </div>
+              <div class="kpi-info">
+                <span class="kpi-label">Delayed / Cancelled</span>
+                <span class="kpi-value">9</span>
+              </div>
+            </div>
+            <div class="kpi-bottom">
+              <div class="kpi-trend">
+                vs yesterday <span class="trend-down">↓ 2</span>
+              </div>
+              <div id="sparkline-delayed" class="kpi-sparkline"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- KPI 4: Outstanding Requests -->
+        <div class="col-6 col-xl-3">
+          <div class="kpi-card">
+            <div class="kpi-top">
+              <div class="kpi-icon-box purple">
+                <i class="bi bi-file-earmark-text"></i>
+              </div>
+              <div class="kpi-info">
+                <span class="kpi-label">Outstanding Requests</span>
+                <span class="kpi-value">14</span>
+              </div>
+            </div>
+            <div class="kpi-bottom">
+              <div class="kpi-trend">
+                vs yesterday <span class="trend-down">↑ 3</span>
+              </div>
+              <div id="sparkline-requests" class="kpi-sparkline"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Dashboard Grid Layout: Left Column & Right Column -->
+      <div class="row g-3">
+        <!-- ================= Left Column (col-xl-8 col-lg-7) ================= -->
+        <div class="col-xl-8 col-lg-7">
+          <!-- 1. Today's Flights Table Card -->
+          <div class="content-card">
+            <div class="card-header-flex">
+              <h2 class="card-title-text">Today's Flights</h2>
+              <a href="flights.html" class="view-all-link" title="Open Flight Management">View all &rarr;</a>
+            </div>
+
+            <div class="flights-table-wrap">
+              <table class="flights-table">
+                <thead>
+                  <tr>
+                    <th class="table-icon-col">+</th>
+                    <th>Flight</th>
+                    <th>Route</th>
+                    <th>STA / ATA</th>
+                    <th>Aircraft</th>
+                    <th>Stand</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Flight 1 -->
+                  <tr>
+                    <td class="table-icon-col"><i class="bi bi-plus"></i></td>
+                    <td>
+                      <div class="flight-number-cell">
+                        <i class="bi bi-airplane-fill"></i>
+                        <span>GF 152</span>
+                      </div>
+                    </td>
+                    <td><span class="route-text">BAH</span> <span class="route-arrow">&rarr;</span> <span class="route-text">LHR</span></td>
+                    <td>08:15 / 08:22</td>
+                    <td><span class="aircraft-text">A9C-KA</span> <span class="aircraft-dot">•</span> <span class="aircraft-text">A321</span></td>
+                    <td><span class="stand-badge">S12</span></td>
+                    <td><span class="status-pill boarding">Boarding</span></td>
+                  </tr>
+
+                  <!-- Flight 2 -->
+                  <tr>
+                    <td class="table-icon-col"><i class="bi bi-plus"></i></td>
+                    <td>
+                      <div class="flight-number-cell">
+                        <i class="bi bi-airplane-fill"></i>
+                        <span>GF 006</span>
+                      </div>
+                    </td>
+                    <td><span class="route-text">BAH</span> <span class="route-arrow">&rarr;</span> <span class="route-text">DXB</span></td>
+                    <td>09:40 / --:--</td>
+                    <td><span class="aircraft-text">A9C-CB</span> <span class="aircraft-dot">•</span> <span class="aircraft-text">A320</span></td>
+                    <td><span class="stand-badge">S07</span></td>
+                    <td><span class="status-pill on-time">On Time</span></td>
+                  </tr>
+
+                  <!-- Flight 3 -->
+                  <tr>
+                    <td class="table-icon-col"><i class="bi bi-plus"></i></td>
+                    <td>
+                      <div class="flight-number-cell">
+                        <i class="bi bi-airplane-fill"></i>
+                        <span>GF 210</span>
+                      </div>
+                    </td>
+                    <td><span class="route-text">CAI</span> <span class="route-arrow">&rarr;</span> <span class="route-text">BAH</span></td>
+                    <td>10:05 / 10:38</td>
+                    <td><span class="aircraft-text">A9C-NA</span> <span class="aircraft-dot">•</span> <span class="aircraft-text">A321</span></td>
+                    <td><span class="stand-badge">S21</span></td>
+                    <td><span class="status-pill delayed">Delayed</span></td>
+                  </tr>
+
+                  <!-- Flight 4 -->
+                  <tr>
+                    <td class="table-icon-col"><i class="bi bi-plus"></i></td>
+                    <td>
+                      <div class="flight-number-cell">
+                        <i class="bi bi-airplane-fill"></i>
+                        <span>GF 504</span>
+                      </div>
+                    </td>
+                    <td><span class="route-text">BAH</span> <span class="route-arrow">&rarr;</span> <span class="route-text">BOM</span></td>
+                    <td>10:50 / --:--</td>
+                    <td><span class="aircraft-text">A9C-KE</span> <span class="aircraft-dot">•</span> <span class="aircraft-text">B788</span></td>
+                    <td><span class="stand-badge">G03</span></td>
+                    <td><span class="status-pill in-progress">In Progress</span></td>
+                  </tr>
+
+                  <!-- Flight 5 -->
+                  <tr>
+                    <td class="table-icon-col"><i class="bi bi-plus"></i></td>
+                    <td>
+                      <div class="flight-number-cell">
+                        <i class="bi bi-airplane-fill"></i>
+                        <span>GF 018</span>
+                      </div>
+                    </td>
+                    <td><span class="route-text">BAH</span> <span class="route-arrow">&rarr;</span> <span class="route-text">KWI</span></td>
+                    <td>11:20 / --:--</td>
+                    <td><span class="aircraft-text">A9C-CC</span> <span class="aircraft-dot">•</span> <span class="aircraft-text">A320</span></td>
+                    <td><span class="stand-badge">S14</span></td>
+                    <td><span class="status-pill on-time">On Time</span></td>
+                  </tr>
+
+                  <!-- Flight 6 -->
+                  <tr>
+                    <td class="table-icon-col"><i class="bi bi-plus"></i></td>
+                    <td>
+                      <div class="flight-number-cell">
+                        <i class="bi bi-airplane-fill"></i>
+                        <span>GF 272</span>
+                      </div>
+                    </td>
+                    <td><span class="route-text">BEY</span> <span class="route-arrow">&rarr;</span> <span class="route-text">BAH</span></td>
+                    <td>11:35 / --:--</td>
+                    <td><span class="aircraft-text">A9C-NB</span> <span class="aircraft-dot">•</span> <span class="aircraft-text">A321</span></td>
+                    <td><span class="stand-badge">S09</span></td>
+                    <td><span class="status-pill cancelled">Cancelled</span></td>
+                  </tr>
+
+                  <!-- Flight 7 -->
+                  <tr>
+                    <td class="table-icon-col"><i class="bi bi-plus"></i></td>
+                    <td>
+                      <div class="flight-number-cell">
+                        <i class="bi bi-airplane-fill"></i>
+                        <span>GF 130</span>
+                      </div>
+                    </td>
+                    <td><span class="route-text">BAH</span> <span class="route-arrow">&rarr;</span> <span class="route-text">JED</span></td>
+                    <td>12:10 / --:--</td>
+                    <td><span class="aircraft-text">A9C-KF</span> <span class="aircraft-dot">•</span> <span class="aircraft-text">A320</span></td>
+                    <td><span class="stand-badge">S17</span></td>
+                    <td><span class="status-pill on-time">On Time</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="table-footer-info">
+              Showing 7 of 148 flights
+            </div>
+          </div>
+
+          <!-- 2. On-Time Performance Chart Card -->
+          <div class="content-card">
+            <div class="card-header-flex">
+              <h2 class="card-title-text">On-Time Performance &bull; last 14 days</h2>
+              <button type="button" class="period-select-btn">
+                <span>Daily</span>
+                <i class="bi bi-chevron-down"></i>
+              </button>
+            </div>
+
+            <div id="ontime-performance-chart" class="chart-container-large"></div>
+
+            <div class="chart-meta-footer">
+              <span class="avg-metric">Avg 92.3%</span>
+              <span class="target-metric">Target 90%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ================= Right Column (col-xl-4 col-lg-5) ================= -->
+        <div class="col-xl-4 col-lg-5">
+          <!-- 1. SLA Performance Donut Chart Card -->
+          <div class="content-card">
+            <div class="card-header-flex">
+              <h2 class="card-title-text">Performance</h2>
+              <button type="button" class="card-more-btn" aria-label="More options">
+                <i class="bi bi-three-dots-vertical"></i>
+              </button>
+            </div>
+
+            <div class="sla-content-wrap">
+              <div class="sla-chart-wrap">
+                <div id="sla-donut-chart" style="width: 165px; height: 165px;"></div>
+                <div class="sla-center-label">
+                  <div class="sla-center-value">96%</div>
+                  <div class="sla-center-sub">on-target</div>
+                </div>
+              </div>
+
+              <ul class="sla-legend-list">
+                <li class="sla-legend-item">
+                  <span class="sla-legend-label">
+                    <span class="sla-legend-dot met"></span>
+                    <span>Met</span>
+                  </span>
+                  <span class="sla-legend-pct">96%</span>
+                </li>
+                <li class="sla-legend-item">
+                  <span class="sla-legend-label">
+                    <span class="sla-legend-dot at-risk"></span>
+                    <span>At risk</span>
+                  </span>
+                  <span class="sla-legend-pct">3%</span>
+                </li>
+                <li class="sla-legend-item">
+                  <span class="sla-legend-label">
+                    <span class="sla-legend-dot breached"></span>
+                    <span>Breached</span>
+                  </span>
+                  <span class="sla-legend-pct">1%</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- 2. Live Aircraft Turnaround Card -->
+          <div class="content-card">
+            <div class="card-header-flex">
+              <h2 class="card-title-text">Live Aircraft Turnaround</h2>
+              <button type="button" class="card-more-btn" aria-label="More options">
+                <i class="bi bi-three-dots-vertical"></i>
+              </button>
+            </div>
+
+            <div class="turnaround-list">
+              <!-- Item 1 -->
+              <div class="turnaround-item">
+                <div class="turnaround-header">
+                  <span class="turnaround-flight">GF 504 &bull; B788</span>
+                  <span class="turnaround-status status-green">On-block &bull; 26m</span>
+                </div>
+                <div class="turnaround-progress-bar-bg">
+                  <div class="turnaround-progress-fill green" style="width: 72%;"></div>
+                </div>
+              </div>
+
+              <!-- Item 2 -->
+              <div class="turnaround-item">
+                <div class="turnaround-header">
+                  <span class="turnaround-flight">GF 152 &bull; A321</span>
+                  <span class="turnaround-status status-blue">Fuelling</span>
+                </div>
+                <div class="turnaround-progress-bar-bg">
+                  <div class="turnaround-progress-fill blue" style="width: 86%;"></div>
+                </div>
+              </div>
+
+              <!-- Item 3 -->
+              <div class="turnaround-item">
+                <div class="turnaround-header">
+                  <span class="turnaround-flight">GF 210 &bull; A321</span>
+                  <span class="turnaround-status status-amber">Cleaning &bull; delayed</span>
+                </div>
+                <div class="turnaround-progress-bar-bg">
+                  <div class="turnaround-progress-fill amber" style="width: 45%;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. Recent Notifications Card -->
+          <div class="content-card">
+            <div class="card-header-flex">
+              <h2 class="card-title-text">Recent Notifications</h2>
+              <a href="#offcanvasNotifications" class="view-all-link" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNotifications" title="Open All Notifications">View all &rarr;</a>
+            </div>
+
+            <div class="notifications-list">
+              <!-- Notif 1 -->
+              <div class="notif-item">
+                <div class="notif-left">
+                  <div class="notif-icon-circle amber">
+                    <i class="bi bi-exclamation-triangle"></i>
+                  </div>
+                  <div class="notif-content">
+                    <span class="notif-title">Gate change</span>
+                    <span class="notif-detail">GF 210 &rarr; Gate S21</span>
+                  </div>
+                </div>
+                <span class="notif-time">8m ago</span>
+              </div>
+
+              <!-- Notif 2 -->
+              <div class="notif-item">
+                <div class="notif-left">
+                  <div class="notif-icon-circle green">
+                    <i class="bi bi-check-circle"></i>
+                  </div>
+                  <div class="notif-content">
+                    <span class="notif-title">Service completed</span>
+                    <span class="notif-detail">Pushback &bull; GF 006</span>
+                  </div>
+                </div>
+                <span class="notif-time">15m ago</span>
+              </div>
+
+              <!-- Notif 3 -->
+              <div class="notif-item">
+                <div class="notif-left">
+                  <div class="notif-icon-circle red">
+                    <i class="bi bi-exclamation-triangle"></i>
+                  </div>
+                  <div class="notif-content">
+                    <span class="notif-title">SLA breach warning</span>
+                    <span class="notif-detail">Baggage &bull; GF 272</span>
+                  </div>
+                </div>
+                <span class="notif-time">22m ago</span>
+              </div>
+
+              <!-- Notif 4 -->
+              <div class="notif-item">
+                <div class="notif-left">
+                  <div class="notif-icon-circle blue">
+                    <i class="bi bi-airplane"></i>
+                  </div>
+                  <div class="notif-content">
+                    <span class="notif-title">Flight departed</span>
+                    <span class="notif-detail">GF 130 &bull; on time</span>
+                  </div>
+                </div>
+                <span class="notif-time">31m ago</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Notifications Offcanvas Drawer -->
+  <div class="offcanvas offcanvas-end offcanvas-notifications" tabindex="-1" id="offcanvasNotifications" aria-labelledby="offcanvasNotifLabel">
+    <div class="offcanvas-header border-bottom py-3">
+      <div>
+        <h5 class="offcanvas-title fw-bold fs-6 text-dark m-0" id="offcanvasNotifLabel">
+          <i class="bi bi-bell-fill text-danger me-2"></i> Operational Notifications
+        </h5>
+        <small class="text-muted">Live Airside Ground Handling Telemetry</small>
+      </div>
+      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="notif-tab-nav">
+      <button type="button" class="notif-tab-btn active" data-notif-filter="all">All (12)</button>
+      <button type="button" class="notif-tab-btn" data-notif-filter="ops">Airside (5)</button>
+      <button type="button" class="notif-tab-btn" data-notif-filter="confirm">Confirmations (4)</button>
+      <button type="button" class="notif-tab-btn" data-notif-filter="billing">Billing (3)</button>
+    </div>
+    <div class="offcanvas-body p-0" style="overflow-y: auto;">
+      <a href="live-status.html" class="notif-item unread" data-category="ops">
+        <div class="notif-avatar red"><i class="bi bi-airplane-fill"></i></div>
+        <div class="flex-grow-1">
+          <div class="notif-title-row">
+            <span class="notif-title">Flight GF 504 In Progress</span>
+            <span class="notif-time">Just now</span>
+          </div>
+          <p class="notif-snippet">Ramp turnaround commenced at Stand G03. Fueling & baggage loading active.</p>
+        </div>
+      </a>
+      <a href="confirmations.html" class="notif-item unread" data-category="confirm">
+        <div class="notif-avatar blue"><i class="bi bi-check2-circle"></i></div>
+        <div class="flex-grow-1">
+          <div class="notif-title-row">
+            <span class="notif-title">Electronic Sign-Off Required</span>
+            <span class="notif-time">10m ago</span>
+          </div>
+          <p class="notif-snippet">Flight GF 152 departure handling finalized. Captain signature pending.</p>
+        </div>
+      </a>
+      <a href="service-requests.html" class="notif-item unread" data-category="ops">
+        <div class="notif-avatar amber"><i class="bi bi-truck"></i></div>
+        <div class="flex-grow-1">
+          <div class="notif-title-row">
+            <span class="notif-title">High-Priority GSE Dispatched</span>
+            <span class="notif-time">22m ago</span>
+          </div>
+          <p class="notif-snippet">Air Start Unit (ASU-04) en-route to Remote Stand S21 for GF 210.</p>
+        </div>
+      </a>
+      <a href="invoices.html" class="notif-item" data-category="billing">
+        <div class="notif-avatar green"><i class="bi bi-receipt"></i></div>
+        <div class="flex-grow-1">
+          <div class="notif-title-row">
+            <span class="notif-title">Invoice INV-2026-0891 Issued</span>
+            <span class="notif-time">1h ago</span>
+          </div>
+          <p class="notif-snippet">Ground handling disbursement statement for Gulf Air July turnaround.</p>
+        </div>
+      </a>
+      <a href="documents.html" class="notif-item" data-category="ops">
+        <div class="notif-avatar blue"><i class="bi bi-file-earmark-pdf"></i></div>
+        <div class="flex-grow-1">
+          <div class="notif-title-row">
+            <span class="notif-title">New IATA De-icing SOP Uploaded</span>
+            <span class="notif-time">2h ago</span>
+          </div>
+          <p class="notif-snippet">Bahrain Airport Services compliance document v4.2 published.</p>
+        </div>
+      </a>
+    </div>
+          <div class="p-3 border-top bg-light text-center">
+        <a href="notifications.html" class="btn btn-outline-secondary btn-sm w-100 fw-semibold">
+          View All Notifications
+        </a>
+      </div>
+  </div>
+
+  <!-- Command Palette / Global Search Modal (⌘K) -->
+  <div class="modal fade" id="commandPaletteModal" tabindex="-1" aria-labelledby="cmdPaletteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content border-0 shadow-lg" style="border-radius: 16px; overflow: hidden;">
+        <div class="cmd-search-input-wrap bg-white">
+          <i class="bi bi-search text-danger"></i>
+          <input type="text" id="cmdPaletteSearchInput" class="cmd-search-input" placeholder="Type a flight (GF 504), service (Fueling), invoice, or page..." autocomplete="off">
+          <span class="badge bg-light text-secondary border">ESC to close</span>
+        </div>
+        <div class="cmd-results-body bg-white">
+          <div class="cmd-category-title">Portal Navigation</div>
+          <a href="dashboard.html" class="cmd-result-item"><div class="cmd-result-left"><i class="bi bi-house-door text-danger"></i> Operational Dashboard</div><span class="cmd-tag">Page</span></a>
+          <a href="flights.html" class="cmd-result-item"><div class="cmd-result-left"><i class="bi bi-airplane text-danger"></i> Flight Management</div><span class="cmd-tag">Page</span></a>
+          <a href="live-status.html" class="cmd-result-item"><div class="cmd-result-left"><i class="bi bi-tv text-danger"></i> Live FIDS Wallboard Display</div><span class="cmd-tag">Screen</span></a>
+          <a href="service-requests.html" class="cmd-result-item"><div class="cmd-result-left"><i class="bi bi-file-earmark-text text-danger"></i> Service Requests</div><span class="cmd-tag">Page</span></a>
+          <a href="confirmations.html" class="cmd-result-item"><div class="cmd-result-left"><i class="bi bi-check2-circle text-danger"></i> Electronic Confirmations</div><span class="cmd-tag">Page</span></a>
+          <a href="invoices.html" class="cmd-result-item"><div class="cmd-result-left"><i class="bi bi-receipt text-danger"></i> Invoices & Billing</div><span class="cmd-tag">Page</span></a>
+          <a href="reports.html" class="cmd-result-item"><div class="cmd-result-left"><i class="bi bi-bar-chart-line text-danger"></i> Reports & SLA Analytics</div><span class="cmd-tag">Page</span></a>
+          <a href="documents.html" class="cmd-result-item"><div class="cmd-result-left"><i class="bi bi-folder text-danger"></i> Document Repository</div><span class="cmd-tag">Page</span></a>
+          <a href="administration.html" class="cmd-result-item"><div class="cmd-result-left"><i class="bi bi-gear text-danger"></i> Roles & Permissions</div><span class="cmd-tag">Admin</span></a>
+
+          <div class="cmd-category-title mt-2">Active Airside Flights</div>
+          <a href="live-status.html" class="cmd-result-item"><div class="cmd-result-left"><i class="bi bi-airplane-fill text-primary"></i> GF 504 &bull; BAH &rarr; BOM (Stand G03)</div><span class="badge bg-primary text-white">In Progress</span></a>
+          <a href="flights.html" class="cmd-result-item"><div class="cmd-result-left"><i class="bi bi-airplane-fill text-success"></i> GF 006 &bull; BAH &rarr; DXB (Stand S07)</div><span class="badge bg-success text-white">On Time</span></a>
+          <a href="flights.html" class="cmd-result-item"><div class="cmd-result-left"><i class="bi bi-airplane-fill text-warning"></i> GF 210 &bull; CAI &rarr; BAH (Stand S21)</div><span class="badge bg-warning text-dark">Delayed</span></a>
+          <a href="flights.html" class="cmd-result-item"><div class="cmd-result-left"><i class="bi bi-airplane-fill text-info"></i> GF 152 &bull; BAH &rarr; LHR (Stand S12)</div><span class="badge bg-info text-dark">Boarding</span></a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap 5.3 JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Application Logic -->
+  <script src="js/main.js"></script>
+</body>
+</html>
+
+
+
+
+
+

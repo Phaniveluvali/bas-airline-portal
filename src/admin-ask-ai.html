@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bahrain Airport Services - Admin Dashboard</title>
+
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap 5.3 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <!-- Highcharts Scripts (Local & CDN Fallback) -->
+  <script src="js/highcharts.js"></script>
+  <script src="js/accessibility.js"></script>
+
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <header class="top-navbar">
+    <!-- Left: Menu Button & Brand Logo -->
+    <div class="nav-left">
+      <button class="menu-toggle-btn" type="button" aria-label="Toggle navigation menu" title="Toggle Navigation">
+        <img src="images/menu-icon.jpg" alt="Menu">
+      </button>
+      <a href="#" class="brand-logo-wrap">
+        <img src="images/bas-logo.jpg" alt="Bahrain Airport Services - خدمات مطار البحرين">
+      </a>
+    </div>
+
+    <!-- Center: Global Search Bar -->
+    <div class="nav-center">
+      <div class="global-search-container">
+        <span class="search-icon"><i class="bi bi-search"></i></span>
+        <input type="text" class="search-input" placeholder="Search flights, services, invoices, documents..." aria-label="Global Search">
+        <span class="search-shortcut">⌘ K</span>
+      </div>
+    </div>
+
+    <!-- Right: Notifications & User Profile -->
+    <div class="nav-right">
+            <!-- Ask AI Header Button -->
+      <button type="button" class="btn btn-danger text-white fw-bold d-flex align-items-center gap-2 me-3" style="border-radius: 20px; padding: 0.4rem 1rem; font-size: 0.85rem; border: none; box-shadow: 0 2px 4px rgba(239,68,68,0.2);" onclick="window.location.href = window.location.pathname.includes('admin') ? 'admin-ask-ai.html' : 'airline-ask-ai.html'">
+        <i class="bi bi-robot"></i> Ask AI
+      </button>
+
+      <button class="notification-bell-btn" type="button" aria-label="Notifications" title="12 new notifications" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNotifications">
+        <i class="bi bi-bell"></i>
+        <span class="notification-badge">12</span>
+      </button>
+
+      <!-- User Profile Dropdown -->
+      <div class="dropdown">
+        <div class="user-profile-menu dropdown-toggle" id="userProfileDropdown" data-bs-toggle="dropdown" aria-expanded="false" role="button" title="User Profile & Settings">
+                    <div class="user-avatar" style="background-color: #e40221;">BA</div>
+          <div class="user-meta">
+            <span class="user-name">BAS Admin</span>
+            <span class="user-role">System Administrator</span>
+          </div>
+          <i class="bi bi-chevron-down dropdown-arrow"></i>
+        </div>
+        <div class="dropdown-menu dropdown-menu-end profile-dropdown-menu border-0" aria-labelledby="userProfileDropdown">
+                    <div class="profile-dropdown-header">
+            <div class="avatar-lg" style="background-color: #e40221;">BA</div>
+            <div>
+              <div class="user-title">BAS System Administrator</div>
+              <div class="user-station-tag"><i class="bi bi-geo-alt-fill me-1"></i> BAH &bull; Headquarters</div>
+            </div>
+          </div>
+                    <a class="dropdown-item" href="admin-rbac.html"><i class="bi bi-shield-check"></i> Manage Access</a>
+          <a class="dropdown-item" href="#"><i class="bi bi-gear"></i> System Settings</a>
+          <a class="dropdown-item" href="#"><i class="bi bi-person"></i> My Profile</a>
+          <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#commandPaletteModal"><i class="bi bi-search"></i> Quick Command Palette (?K)</a>
+          <hr class="dropdown-divider my-1">
+          <a class="dropdown-item text-danger" href="index.html"><i class="bi bi-box-arrow-right"></i> Sign Out</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- App Layout: Sidebar + Main Content -->
+  <div class="app-layout">
+    <!-- Sidebar Overlay for Mobile/Tablet -->
+    <div class="sidebar-overlay"></div>
+
+    <!-- Sidebar Navigation -->
+    <aside class="app-sidebar">
+            <div class="sidebar-content">
+                <div class="sidebar-section-title mt-2">MANAGEMENT</div>
+        <ul class="sidebar-nav">
+          <li>
+            <a href="admin-dashboard.html" class="nav-item-link">
+              <i class="bi bi-speedometer2"></i>
+              <span>Dashboard</span>
+            </a>
+          </li>
+          <li>
+            <a href="admin-airlines.html" class="nav-item-link">
+              <i class="bi bi-airplane"></i>
+              <span>Airlines</span>
+            </a>
+          </li>
+          <li>
+            <a href="admin-approvals.html" class="nav-item-link">
+              <i class="bi bi-file-earmark-text"></i>
+              <span>Registration Approvals</span>
+              <span class="nav-badge" style="background-color: var(--primary-red);">4</span>
+            </a>
+          </li>
+          <li>
+            <a href="admin-users.html" class="nav-item-link">
+              <i class="bi bi-person"></i>
+              <span>Users</span>
+            </a>
+          </li>
+          <li>
+            <a href="admin-rbac.html" class="nav-item-link">
+              <i class="bi bi-people"></i>
+              <span>Roles &amp; Permissions</span>
+            </a>
+          </li>
+        </ul>
+
+        <div class="sidebar-section-title mt-4">SYSTEM</div>
+        <ul class="sidebar-nav">
+          <li>
+            <a href="#" class="nav-item-link">
+              <i class="bi bi-gear"></i>
+              <span>System Settings</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="nav-item-link">
+              <i class="bi bi-bar-chart"></i>
+              <span>Audit Logs</span>
+            </a>
+          </li>
+        </ul>
+
+        <div class="mt-auto pt-3 border-top border-secondary border-opacity-25" style="margin-top: 2rem !important; margin-bottom: 1rem;">
+          <ul class="sidebar-nav mb-0">
+            <li>
+              <a href="#" class="nav-item-link">
+                <i class="bi bi-person"></i>
+                <span>My Profile</span>
+              </a>
+            </li>
+            <li>
+              <a href="index.html" class="nav-item-link">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>Sign out</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <!-- Watermark Airplane Background Illustration (Matching Mockup) -->
+      <div class="sidebar-watermark">
+        <svg viewBox="0 0 260 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Flowing Contrail Streams fanning out from bottom left to aircraft -->
+          <path d="M 0 210 C 50 200, 110 160, 175 105" stroke="#3b82f6" stroke-width="1.2" opacity="0.35"/>
+          <path d="M 0 215 C 65 205, 125 155, 185 100" stroke="#60a5fa" stroke-width="1.5" opacity="0.3"/>
+          <path d="M 5 220 C 75 210, 135 150, 192 95" stroke="#93c5fd" stroke-width="1.2" opacity="0.25"/>
+          <path d="M 15 225 C 85 215, 145 145, 200 90" stroke="#bfdbfe" stroke-width="0.8" opacity="0.2"/>
+
+          <!-- Commercial airliner ascending diagonally towards upper right -->
+          <g transform="translate(195, 95) rotate(-38) scale(0.52)" fill="#4b6b94" opacity="0.55">
+            <!-- Main Body (Fuselage) -->
+            <path d="M 0 -70 Q 7 -30 8 40 Q 8 65 0 75 Q -8 65 -8 40 Q -7 -30 0 -70 Z"/>
+            <!-- Cockpit nose -->
+            <ellipse cx="0" cy="-70" rx="3.5" ry="5"/>
+            <!-- Main Swept Wings -->
+            <polygon points="0,-15 85,38 78,48 0,16 -78,48 -85,38 0,-15"/>
+            <!-- Engines under wings -->
+            <rect x="22" y="10" width="6" height="15" rx="3" fill="#3b567d"/>
+            <rect x="-28" y="10" width="6" height="15" rx="3" fill="#3b567d"/>
+            <!-- Horizontal Stabilizers -->
+            <polygon points="0,52 38,72 34,78 0,66 -34,78 -38,72 0,52"/>
+          </g>
+        </svg>
+      </div>
+
+      <!-- Sidebar Footer (Sign Out) -->
+      <div class="sidebar-footer">
+        <a href="index.html" class="signout-link" title="Sign out to Login">
+          <i class="bi bi-box-arrow-right"></i>
+          <span>Sign out</span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Dashboard Content -->
+            <main class="main-content" style="background-color: #f8fafc; padding: 1.5rem; display: flex; flex-direction: column; height: 100vh; overflow: hidden;">
+  
+  <div class="d-flex justify-content-between align-items-center mb-3 flex-shrink-0">
+    <div>
+      <h1 class="fw-bold mb-1" style="color: #0f172a; font-size: 1.5rem;">BAS AI Assistant</h1>
+      <p class="text-secondary mb-0" style="font-size: 0.85rem;">Ask questions about airlines, flights, service requests and portal operations.</p>
+    </div>
+    <div class="d-flex gap-2">
+      <button class="btn btn-outline-secondary fw-bold d-flex align-items-center gap-2 rounded-3 bg-white" style="font-size: 0.85rem; padding: 0.5rem 1rem;" id="clearBtn">
+        <i class="bi bi-trash"></i> Clear Chat
+      </button>
+      <button class="btn btn-danger text-white fw-bold d-flex align-items-center gap-2 rounded-3" style="font-size: 0.85rem; padding: 0.5rem 1rem;" id="newChatBtn">
+        <i class="bi bi-plus-lg"></i> New Chat
+      </button>
+    </div>
+  </div>
+
+  <div class="suggested-questions flex-shrink-0">
+    <button class="suggestion-card">Show pending registration approvals</button>
+    <button class="suggestion-card">Today's Delayed Flights</button>
+    <button class="suggestion-card">Pending Service Requests</button>
+ 
+  </div>
+
+  <div class="chat-wrapper flex-grow-1 d-flex flex-column" style="min-height: 0;">
+    <div class="chat-messages" id="chatMessages">
+      <div class="chat-message ai">
+        <div class="chat-avatar ai-avatar"><i class="bi bi-robot"></i></div>
+        <div class="chat-bubble">
+          <h6 class="fw-bold mb-1">Hello! I am your BAS AI Assistant.</h6>
+          <p class="mb-0 text-secondary" style="font-size:0.85rem;">How can I help you today? You can select a suggestion above or type your question below.</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="chat-input-area mt-auto">
+      <div class="input-group">
+        <input type="text" class="form-control" id="chatInput" placeholder="Ask anything about BAS operations..." style="border-radius: 8px 0 0 8px; padding: 0.75rem 1rem;">
+        <button class="btn btn-danger px-4" id="sendBtn" style="border-radius: 0 8px 8px 0;">
+          <i class="bi bi-send"></i> Send
+        </button>
+      </div>
+    </div>
+  </div>
+
+</main>
+  </div>
+
+  <!-- Notifications Offcanvas Drawer -->
+  <div class="offcanvas offcanvas-end offcanvas-notifications" tabindex="-1" id="offcanvasNotifications" aria-labelledby="offcanvasNotifLabel">
+    <div class="offcanvas-header border-bottom py-3">
+      <div>
+        <h5 class="offcanvas-title fw-bold fs-6 text-dark m-0" id="offcanvasNotifLabel">
+          <i class="bi bi-bell-fill text-danger me-2"></i> Operational Notifications
+        </h5>
+        <small class="text-muted">Live Airside Ground Handling Telemetry</small>
+      </div>
+      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="notif-tab-nav">
+      <button type="button" class="notif-tab-btn active" data-notif-filter="all">All (12)</button>
+      <button type="button" class="notif-tab-btn" data-notif-filter="ops">Airside (5)</button>
+      <button type="button" class="notif-tab-btn" data-notif-filter="confirm">Confirmations (4)</button>
+      <button type="button" class="notif-tab-btn" data-notif-filter="billing">Billing (3)</button>
+    </div>
+    <div class="offcanvas-body p-0" style="overflow-y: auto;">
+      <a href="live-status.html" class="notif-item unread" data-category="ops">
+        <div class="notif-avatar red"><i class="bi bi-airplane-fill"></i></div>
+        <div class="flex-grow-1">
+          <div class="notif-title-row">
+            <span class="notif-title">Flight GF 504 In Progress</span>
+            <span class="notif-time">Just now</span>
+          </div>
+          <p class="notif-snippet">Ramp turnaround commenced at Stand G03. Fueling & baggage loading active.</p>
+        </div>
+      </a>
+      <a href="confirmations.html" class="notif-item unread" data-category="confirm">
+        <div class="notif-avatar blue"><i class="bi bi-check2-circle"></i></div>
+        <div class="flex-grow-1">
+          <div class="notif-title-row">
+            <span class="notif-title">Electronic Sign-Off Required</span>
+            <span class="notif-time">10m ago</span>
+          </div>
+          <p class="notif-snippet">Flight GF 152 departure handling finalized. Captain signature pending.</p>
+        </div>
+      </a>
+      <a href="service-requests.html" class="notif-item unread" data-category="ops">
+        <div class="notif-avatar amber"><i class="bi bi-truck"></i></div>
+        <div class="flex-grow-1">
+          <div class="notif-title-row">
+            <span class="notif-title">High-Priority GSE Dispatched</span>
+            <span class="notif-time">22m ago</span>
+          </div>
+          <p class="notif-snippet">Air Start Unit (ASU-04) en-route to Remote Stand S21 for GF 210.</p>
+        </div>
+      </a>
+      <a href="invoices.html" class="notif-item" data-category="billing">
+        <div class="notif-avatar green"><i class="bi bi-receipt"></i></div>
+        <div class="flex-grow-1">
+          <div class="notif-title-row">
+            <span class="notif-title">Invoice INV-2026-0891 Issued</span>
+            <span class="notif-time">1h ago</span>
+          </div>
+          <p class="notif-snippet">Ground handling disbursement statement for Gulf Air July turnaround.</p>
+        </div>
+      </a>
+      <a href="documents.html" class="notif-item" data-category="ops">
+        <div class="notif-avatar blue"><i class="bi bi-file-earmark-pdf"></i></div>
+        <div class="flex-grow-1">
+          <div class="notif-title-row">
+            <span class="notif-title">New IATA De-icing SOP Uploaded</span>
+            <span class="notif-time">2h ago</span>
+          </div>
+          <p class="notif-snippet">Bahrain Airport Services compliance document v4.2 published.</p>
+        </div>
+      </a>
+    </div>
+          <div class="p-3 border-top bg-light text-center">
+        <a href="notifications.html" class="btn btn-outline-secondary btn-sm w-100 fw-semibold">
+          View All Notifications
+        </a>
+      </div>
+  </div>
+
+  <!-- Command Palette / Global Search Modal (⌘K) -->
+  <div class="modal fade" id="commandPaletteModal" tabindex="-1" aria-labelledby="cmdPaletteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content border-0 shadow-lg" style="border-radius: 16px; overflow: hidden;">
+        <div class="cmd-search-input-wrap bg-white">
+          <i class="bi bi-search text-danger"></i>
+          <input type="text" id="cmdPaletteSearchInput" class="cmd-search-input" placeholder="Type a flight (GF 504), service (Fueling), invoice, or page..." autocomplete="off">
+          <span class="badge bg-light text-secondary border">ESC to close</span>
+        </div>
+        <div class="cmd-results-body bg-white">
+          <div class="cmd-category-title">Portal Navigation</div>
+          <a href="dashboard.html" class="cmd-result-item"><div class="cmd-result-left"><i class="bi bi-house-door text-danger"></i> Operational Dashboard</div><span class="cmd-tag">Page</span></a>
+          <a href="flights.html" class="cmd-result-item"><div class="cmd-result-left"><i class="bi bi-airplane text-danger"></i> Flight Management</div><span class="cmd-tag">Page</span></a>
+          <a href="live-status.html" class="cmd-result-item"><div class="cmd-result-left"><i class="bi bi-tv text-danger"></i> Live FIDS Wallboard Display</div><span class="cmd-tag">Screen</span></a>
+          <a href="service-requests.html" class="cmd-result-item"><div class="cmd-result-left"><i class="bi bi-file-earmark-text text-danger"></i> Service Requests</div><span class="cmd-tag">Page</span></a>
+          <a href="confirmations.html" class="cmd-result-item"><div class="cmd-result-left"><i class="bi bi-check2-circle text-danger"></i> Electronic Confirmations</div><span class="cmd-tag">Page</span></a>
+          <a href="invoices.html" class="cmd-result-item"><div class="cmd-result-left"><i class="bi bi-receipt text-danger"></i> Invoices & Billing</div><span class="cmd-tag">Page</span></a>
+          <a href="reports.html" class="cmd-result-item"><div class="cmd-result-left"><i class="bi bi-bar-chart-line text-danger"></i> Reports & SLA Analytics</div><span class="cmd-tag">Page</span></a>
+          <a href="documents.html" class="cmd-result-item"><div class="cmd-result-left"><i class="bi bi-folder text-danger"></i> Document Repository</div><span class="cmd-tag">Page</span></a>
+          <a href="administration.html" class="cmd-result-item"><div class="cmd-result-left"><i class="bi bi-gear text-danger"></i> Roles & Permissions</div><span class="cmd-tag">Admin</span></a>
+
+          <div class="cmd-category-title mt-2">Active Airside Flights</div>
+          <a href="live-status.html" class="cmd-result-item"><div class="cmd-result-left"><i class="bi bi-airplane-fill text-primary"></i> GF 504 &bull; BAH &rarr; BOM (Stand G03)</div><span class="badge bg-primary text-white">In Progress</span></a>
+          <a href="flights.html" class="cmd-result-item"><div class="cmd-result-left"><i class="bi bi-airplane-fill text-success"></i> GF 006 &bull; BAH &rarr; DXB (Stand S07)</div><span class="badge bg-success text-white">On Time</span></a>
+          <a href="flights.html" class="cmd-result-item"><div class="cmd-result-left"><i class="bi bi-airplane-fill text-warning"></i> GF 210 &bull; CAI &rarr; BAH (Stand S21)</div><span class="badge bg-warning text-dark">Delayed</span></a>
+          <a href="flights.html" class="cmd-result-item"><div class="cmd-result-left"><i class="bi bi-airplane-fill text-info"></i> GF 152 &bull; BAH &rarr; LHR (Stand S12)</div><span class="badge bg-info text-dark">Boarding</span></a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap 5.3 JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Application Logic -->
+  <script src="js/main.js"></script>
+    <!-- Add Airline Modal -->
+    <div class="modal fade" id="addAirlineModal" tabindex="-1" aria-labelledby="addAirlineModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+          <div class="modal-header border-bottom-0 bg-light p-4 pb-3">
+            <div>
+              <h5 class="modal-title fw-bold text-dark mb-1" id="addAirlineModalLabel">Add New Airline</h5>
+              <div class="text-secondary" style="font-size: 0.85rem;">Register a new airline in the GHS portal.</div>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body p-4 pt-2">
+            <form id="addAirlineForm">
+              
+              <h6 class="fw-bold text-dark mb-3 border-bottom pb-2" style="font-size: 0.95rem;">Basic Information</h6>
+              <div class="row g-3 mb-4">
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold text-secondary" style="font-size: 0.85rem;">Airline Name <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" placeholder="e.g. Gulf Air">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold text-secondary" style="font-size: 0.85rem;">Legal Name</label>
+                  <input type="text" class="form-control" placeholder="e.g. Gulf Air Company B.S.C.">
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label fw-semibold text-secondary" style="font-size: 0.85rem;">IATA Code <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control text-uppercase" placeholder="e.g. GF" maxlength="2">
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label fw-semibold text-secondary" style="font-size: 0.85rem;">ICAO Code</label>
+                  <input type="text" class="form-control text-uppercase" placeholder="e.g. GFA" maxlength="3">
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label fw-semibold text-secondary" style="font-size: 0.85rem;">Call Sign</label>
+                  <input type="text" class="form-control text-uppercase" placeholder="e.g. GULFAIR">
+                </div>
+                <div class="col-md-12">
+                  <label class="form-label fw-semibold text-secondary" style="font-size: 0.85rem;">Airline Logo</label>
+                  <input class="form-control" type="file" id="formFile">
+                </div>
+              </div>
+
+              <h6 class="fw-bold text-dark mb-3 border-bottom pb-2" style="font-size: 0.95rem;">Contact &amp; Operational Details</h6>
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold text-secondary" style="font-size: 0.85rem;">Primary Contact Email <span class="text-danger">*</span></label>
+                  <input type="email" class="form-control" placeholder="ops@airline.com">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold text-secondary" style="font-size: 0.85rem;">Contact Phone</label>
+                  <input type="text" class="form-control" placeholder="+973 12345678">
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label fw-semibold text-secondary" style="font-size: 0.85rem;">Region</label>
+                  <select class="form-select">
+                    <option selected disabled>Select Region...</option>
+                    <option>Middle East</option>
+                    <option>Europe</option>
+                    <option>Asia</option>
+                    <option>Americas</option>
+                    <option>Africa</option>
+                  </select>
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label fw-semibold text-secondary" style="font-size: 0.85rem;">Home Hub</label>
+                  <input type="text" class="form-control text-uppercase" placeholder="e.g. BAH">
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label fw-semibold text-secondary" style="font-size: 0.85rem;">Initial Status</label>
+                  <select class="form-select">
+                    <option value="pending" selected>Pending Approval</option>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                  </select>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer border-top-0 bg-light p-4 pt-3">
+            <button type="button" class="btn btn-outline-secondary fw-semibold px-4" data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-danger fw-semibold px-4" data-bs-dismiss="modal">Register Airline</button>
+          </div>
+        </div>
+      </div>
+    </div>
+<script src="js/ask-ai.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

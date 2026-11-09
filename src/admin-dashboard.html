@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bahrain Airport Services - Admin Dashboard</title>
+
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap 5.3 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <!-- Highcharts Scripts (Local & CDN Fallback) -->
+  <script src="js/highcharts.js"></script>
+  <script src="js/accessibility.js"></script>
+
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <header class="top-navbar">
+    <!-- Left: Menu Button & Brand Logo -->
+    <div class="nav-left">
+      <button class="menu-toggle-btn" type="button" aria-label="Toggle navigation menu" title="Toggle Navigation">
+        <img src="images/menu-icon.jpg" alt="Menu">
+      </button>
+      <a href="#" class="brand-logo-wrap">
+        <img src="images/bas-logo.jpg" alt="Bahrain Airport Services - خدمات مطار البحرين">
+      </a>
+    </div>
+
+    <!-- Center: Global Search Bar -->
+    <div class="nav-center">
+      <div class="global-search-container">
+        <span class="search-icon"><i class="bi bi-search"></i></span>
+        <input type="text" class="search-input" placeholder="Search flights, services, invoices, documents..." aria-label="Global Search">
+        <span class="search-shortcut">⌘ K</span>
+      </div>
+    </div>
+
+    <!-- Right: Notifications & User Profile -->
+    <div class="nav-right">
+            <!-- Ask AI Header Button -->
+      <button type="button" class="btn btn-danger text-white fw-bold d-flex align-items-center gap-2 me-3" style="border-radius: 20px; padding: 0.4rem 1rem; font-size: 0.85rem; border: none; box-shadow: 0 2px 4px rgba(239,68,68,0.2);" onclick="window.location.href = window.location.pathname.includes('admin') ? 'admin-ask-ai.html' : 'airline-ask-ai.html'">
+        <i class="bi bi-robot"></i> Ask AI
+      </button>
+
+      <button class="notification-bell-btn" type="button" aria-label="Notifications" title="12 new notifications" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNotifications">
+        <i class="bi bi-bell"></i>
+        <span class="notification-badge">12</span>
+      </button>
+
+      <!-- User Profile Dropdown -->
+      <div class="dropdown">
+        <div class="user-profile-menu dropdown-toggle" id="userProfileDropdown" data-bs-toggle="dropdown" aria-expanded="false" role="button" title="User Profile & Settings">
+                    <div class="user-avatar" style="background-color: #e40221;">BA</div>
+          <div class="user-meta">
+            <span class="user-name">BAS Admin</span>
+            <span class="user-role">System Administrator</span>
+          </div>
+          <i class="bi bi-chevron-down dropdown-arrow"></i>
+        </div>
+        <div class="dropdown-menu dropdown-menu-end profile-dropdown-menu border-0" aria-labelledby="userProfileDropdown">
+                    <div class="profile-dropdown-header">
+            <div class="avatar-lg" style="background-color: #e40221;">BA</div>
+            <div>
+              <div class="user-title">BAS System Administrator</div>
+              <div class="user-station-tag"><i class="bi bi-geo-alt-fill me-1"></i> BAH &bull; Headquarters</div>
+            </div>
+          </div>
+                    <a class="dropdown-item" href="admin-rbac.html"><i class="bi bi-shield-check"></i> Manage Access</a>
+          <a class="dropdown-item" href="#"><i class="bi bi-gear"></i> System Settings</a>
+          <a class="dropdown-item" href="#"><i class="bi bi-person"></i> My Profile</a>
+          <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#commandPaletteModal"><i class="bi bi-search"></i> Quick Command Palette (?K)</a>
+          <hr class="dropdown-divider my-1">
+          <a class="dropdown-item text-danger" href="index.html"><i class="bi bi-box-arrow-right"></i> Sign Out</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- App Layout: Sidebar + Main Content -->
+  <div class="app-layout">
+    <!-- Sidebar Overlay for Mobile/Tablet -->
+    <div class="sidebar-overlay"></div>
+
+    <!-- Sidebar Navigation -->
+    <aside class="app-sidebar">
+            <div class="sidebar-content">
+                <div class="sidebar-section-title mt-2">MANAGEMENT</div>
+        <ul class="sidebar-nav">
+          <li>
+            <a href="admin-dashboard.html" class="nav-item-link active">
+              <i class="bi bi-speedometer2"></i>
+              <span>Dashboard</span>
+            </a>
+          </li>
+          <li>
+            <a href="admin-airlines.html" class="nav-item-link">
+              <i class="bi bi-airplane"></i>
+              <span>Airlines</span>
+            </a>
+          </li>
+          <li>
+            <a href="admin-approvals.html" class="nav-item-link">
+              <i class="bi bi-file-earmark-text"></i>
+              <span>Registration Approvals</span>
+              <span class="nav-badge" style="background-color: var(--primary-red);">4</span>
+            </a>
+          </li>
+          <li>
+            <a href="admin-users.html" class="nav-item-link">
+              <i class="bi bi-person"></i>
+              <span>Users</span>
+            </a>
+          </li>
+          <li>
+            <a href="admin-rbac.html" class="nav-item-link">
+              <i class="bi bi-people"></i>
+              <span>Roles &amp; Permissions</span>
+            </a>
+          </li>
+        </ul>
+
+        <div class="sidebar-section-title mt-4">SYSTEM</div>
+        <ul class="sidebar-nav">
+          <li>
+            <a href="#" class="nav-item-link">
+              <i class="bi bi-gear"></i>
+              <span>System Settings</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="nav-item-link">
+              <i class="bi bi-bar-chart"></i>
+              <span>Audit Logs</span>
+            </a>
+          </li>
+        </ul>
+
+        <div class="mt-auto pt-3 border-top border-secondary border-opacity-25" style="margin-top: 2rem !important; margin-bottom: 1rem;">
+          <ul class="sidebar-nav mb-0">
+            <li>
+              <a href="#" class="nav-item-link">
+                <i class="bi bi-person"></i>
+                <span>My Profile</span>
+              </a>
+            </li>
+            <li>
+              <a href="index.html" class="nav-item-link">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>Sign out</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <!-- Watermark Airplane Background Illustration (Matching Mockup) -->
+      <div class="sidebar-watermark">
+        <svg viewBox="0 0 260 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Flowing Contrail Streams fanning out from bottom left to aircraft -->
+          <path d="M 0 210 C 50 200, 110 160, 175 105" stroke="#3b82f6" stroke-width="1.2" opacity="0.35"/>
+          <path d="M 0 215 C 65 205, 125 155, 185 100" stroke="#60a5fa" stroke-width="1.5" opacity="0.3"/>
+          <path d="M 5 220 C 75 210, 135 150, 192 95" stroke="#93c5fd" stroke-width="1.2" opacity="0.25"/>
+          <path d="M 15 225 C 85 215, 145 145, 200 90" stroke="#bfdbfe" stroke-width="0.8" opacity="0.2"/>
+
+          <!-- Commercial airliner ascending diagonally towards upper right -->
+          <g transform="translate(195, 95) rotate(-38) scale(0.52)" fill="#4b6b94" opacity="0.55">
+            <!-- Main Body (Fuselage) -->
+            <path d="M 0 -70 Q 7 -30 8 40 Q 8 65 0 75 Q -8 65 -8 40 Q -7 -30 0 -70 Z"/>
+            <!-- Cockpit nose -->
+            <ellipse cx="0" cy="-70" rx="3.5" ry="5"/>
+            <!-- Main Swept Wings -->
+            <polygon points="0,-15 85,38 78,48 0,16 -78,48 -85,38 0,-15"/>
+            <!-- Engines under wings -->
+            <rect x="22" y="10" width="6" height="15" rx="3" fill="#3b567d"/>
+            <rect x="-28" y="10" width="6" height="15" rx="3" fill="#3b567d"/>
+            <!-- Horizontal Stabilizers -->
+            <polygon points="0,52 38,72 34,78 0,66 -34,78 -38,72 0,52"/>
+          </g>
+        </svg>
+      </div>
+
+      <!-- Sidebar Footer (Sign Out) -->
+      <div class="sidebar-footer">
+        <a href="index.html" class="signout-link" title="Sign out to Login">
+          <i class="bi bi-box-arrow-right"></i>
+          <span>Sign out</span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Dashboard Content -->
+            <main class="main-content" style="background-color: #f1f5f9; padding: 1.5rem;">
+      
+      <!-- Welcome Banner -->
+      <div class="mb-3 p-4 rounded-3 position-relative overflow-hidden shadow-sm d-flex justify-content-between align-items-center" style="background-color: #f8fafc; border: 1px solid #e2e8f0;">
+        <div class="position-relative z-1">
+          <h1 class="fw-bold mb-2" style="color: #0f172a; font-size: 1.8rem;">Welcome, BAS Admin</h1>
+          <p class="text-secondary mb-0" style="font-size: 0.9rem;">Monitor portal activity, manage airlines, service requests and system configuration.</p>
+        </div>
+        <div class="position-relative z-1 text-end" style="color: #0f172a;">
+          <div class="fw-bold text-uppercase" style="letter-spacing: 1.5px; font-size: 0.8rem; line-height: 1.4;">Connecting<br>Airlines<br>Enabling Tomorrow</div>
+          <div style="width: 30px; height: 3px; background-color: #e40221; display: inline-block; margin-top: 5px;"></div>
+        </div>
+        <!-- Decorative plane tail in background -->
+        <i class="bi bi-airplane-fill position-absolute" style="font-size: 12rem; color: #e2e8f0; right: 200px; top: -30px; transform: rotate(-45deg); opacity: 0.4; z-index: 0;"></i>
+      </div>
+
+      <!-- KPI Row (5 Cards) -->
+      <div class="kpi-row-5 mb-4">
+        <!-- 1 -->
+        <div class="card border-0 shadow-sm rounded-3 p-3 d-flex flex-row align-items-center bg-white h-100">
+          <div class="rounded-circle d-flex justify-content-center align-items-center me-3" style="width: 48px; height: 48px; background-color: #fee2e2; color: #ef4444;">
+            <i class="bi bi-airplane-fill fs-5"></i>
+          </div>
+          <div class="flex-grow-1">
+            <div class="d-flex justify-content-between align-items-center">
+              <span class="text-secondary" style="font-size: 0.8rem;">Total Airlines</span>
+              <i class="bi bi-chevron-right text-muted" style="font-size: 0.7rem;"></i>
+            </div>
+            <div class="fw-bold text-dark fs-4 lh-1 mt-1 mb-1">24</div>
+            <div class="text-success" style="font-size: 0.75rem;"><i class="bi bi-arrow-up"></i> 2 this month</div>
+          </div>
+        </div>
+        <!-- 2 -->
+        <div class="card border-0 shadow-sm rounded-3 p-3 d-flex flex-row align-items-center bg-white h-100">
+          <div class="rounded-circle d-flex justify-content-center align-items-center me-3" style="width: 48px; height: 48px; background-color: #fee2e2; color: #ef4444;">
+            <i class="bi bi-airplane-engines fs-5"></i>
+          </div>
+          <div class="flex-grow-1">
+            <div class="d-flex justify-content-between align-items-center">
+              <span class="text-secondary" style="font-size: 0.8rem;">Total Flights (Today)</span>
+              <i class="bi bi-chevron-right text-muted" style="font-size: 0.7rem;"></i>
+            </div>
+            <div class="fw-bold text-dark fs-4 lh-1 mt-1 mb-1">186</div>
+            <div class="text-success" style="font-size: 0.75rem;"><i class="bi bi-arrow-up"></i> 5% from yesterday</div>
+          </div>
+        </div>
+        <!-- 3 -->
+        <div class="card border-0 shadow-sm rounded-3 p-3 d-flex flex-row align-items-center bg-white h-100">
+          <div class="rounded-circle d-flex justify-content-center align-items-center me-3" style="width: 48px; height: 48px; background-color: #fee2e2; color: #ef4444;">
+            <i class="bi bi-file-earmark-text fs-5"></i>
+          </div>
+          <div class="flex-grow-1">
+            <div class="d-flex justify-content-between align-items-center">
+              <span class="text-secondary" style="font-size: 0.8rem;">Service Requests</span>
+              <i class="bi bi-chevron-right text-muted" style="font-size: 0.7rem;"></i>
+            </div>
+            <div class="fw-bold text-dark fs-4 lh-1 mt-1 mb-1">128</div>
+            <div class="text-danger" style="font-size: 0.75rem;"><i class="bi bi-arrow-up"></i> 12 pending</div>
+          </div>
+        </div>
+        <!-- 4 -->
+        <div class="card border-0 shadow-sm rounded-3 p-3 d-flex flex-row align-items-center bg-white h-100">
+          <div class="rounded-circle d-flex justify-content-center align-items-center me-3" style="width: 48px; height: 48px; background-color: #dcfce7; color: #16a34a;">
+            <i class="bi bi-check-circle fs-5"></i>
+          </div>
+          <div class="flex-grow-1">
+            <div class="d-flex justify-content-between align-items-center">
+              <span class="text-secondary" style="font-size: 0.8rem;">Completed Services</span>
+              <i class="bi bi-chevron-right text-muted" style="font-size: 0.7rem;"></i>
+            </div>
+            <div class="fw-bold text-dark fs-4 lh-1 mt-1 mb-1">96</div>
+            <div class="text-success" style="font-size: 0.75rem;"><i class="bi bi-arrow-up"></i> 8% from yesterday</div>
+          </div>
+        </div>
+        <!-- 5 -->
+        <div class="card border-0 shadow-sm rounded-3 p-3 d-flex flex-row align-items-center bg-white h-100">
+          <div class="rounded-circle d-flex justify-content-center align-items-center me-3" style="width: 48px; height: 48px; background-color: #ffedd5; color: #ea580c;">
+            <i class="bi bi-clock-history fs-5"></i>
+          </div>
+          <div class="flex-grow-1">
+            <div class="d-flex justify-content-between align-items-center">
+              <span class="text-secondary" style="font-size: 0.8rem;">Pending Approvals</span>
+              <i class="bi bi-chevron-right text-muted" style="font-size: 0.7rem;"></i>
+            </div>
+            <div class="fw-bold text-dark fs-4 lh-1 mt-1 mb-1">8</div>
+            <div class="text-secondary" style="font-size: 0.75rem;">Requires action</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Middle Row -->
+      <div class="row g-3 mb-3">
+        <!-- Service Requests Trend (Bar Chart Placeholder) -->
+        <div class="col-xl-5">
+          <div class="card border-0 shadow-sm rounded-3 bg-white h-100 p-3">
+            <div class="d-flex justify-content-between align-items-start mb-3">
+              <div class="d-flex align-items-center gap-2">
+                <i class="bi bi-file-bar-graph text-danger fs-5"></i>
+                <div>
+                  <h6 class="fw-bold mb-0 text-dark" style="font-size: 0.95rem;">Service Requests Trend</h6>
+                  <div class="text-muted" style="font-size: 0.75rem;">Requests received vs completed over the last 6 months</div>
+                </div>
+              </div>
+              <div class="d-flex gap-3 text-secondary" style="font-size: 0.75rem;">
+                <span class="d-flex align-items-center gap-1"><span class="d-inline-block rounded-circle" style="width:8px; height:8px; background-color: #1e293b;"></span> Received</span>
+                <span class="d-flex align-items-center gap-1"><span class="d-inline-block rounded-circle" style="width:8px; height:8px; background-color: #e40221;"></span> Completed</span>
+              </div>
+            </div>
+            <!-- Mock Bar Chart -->
+            <div class="d-flex align-items-end justify-content-around mt-auto" style="height: 150px; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px;">
+              <!-- Apr -->
+              <div class="d-flex gap-1 align-items-end h-100">
+                <div style="width: 25px; height: 40%; background-color: #1e293b; border-radius: 3px 3px 0 0;" title="80"></div>
+                <div style="width: 25px; height: 32%; background-color: #e40221; border-radius: 3px 3px 0 0;" title="65"></div>
+              </div>
+              <!-- May -->
+              <div class="d-flex gap-1 align-items-end h-100">
+                <div style="width: 25px; height: 50%; background-color: #1e293b; border-radius: 3px 3px 0 0;" title="95"></div>
+                <div style="width: 25px; height: 40%; background-color: #e40221; border-radius: 3px 3px 0 0;" title="78"></div>
+              </div>
+              <!-- Jun -->
+              <div class="d-flex gap-1 align-items-end h-100">
+                <div style="width: 25px; height: 65%; background-color: #1e293b; border-radius: 3px 3px 0 0;" title="120"></div>
+                <div style="width: 25px; height: 50%; background-color: #e40221; border-radius: 3px 3px 0 0;" title="96"></div>
+              </div>
+              <!-- Jul -->
+              <div class="d-flex gap-1 align-items-end h-100">
+                <div style="width: 25px; height: 80%; background-color: #1e293b; border-radius: 3px 3px 0 0;" title="142"></div>
+                <div style="width: 25px; height: 60%; background-color: #e40221; border-radius: 3px 3px 0 0;" title="118"></div>
+              </div>
+              <!-- Aug -->
+              <div class="d-flex gap-1 align-items-end h-100">
+                <div style="width: 25px; height: 90%; background-color: #1e293b; border-radius: 3px 3px 0 0;" title="160"></div>
+                <div style="width: 25px; height: 75%; background-color: #e40221; border-radius: 3px 3px 0 0;" title="134"></div>
+              </div>
+              <!-- Sep -->
+              <div class="d-flex gap-1 align-items-end h-100">
+                <div style="width: 25px; height: 70%; background-color: #1e293b; border-radius: 3px 3px 0 0;" title="128"></div>
+                <div style="width: 25px; height: 50%; background-color: #e40221; border-radius: 3px 3px 0 0;" title="96"></div>
+              </div>
+            </div>
+            <div class="d-flex justify-content-around text-muted mt-2" style="font-size: 0.7rem;">
+              <span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Donut Chart Placeholder -->
+        <div class="col-xl-3">
+          <div class="card border-0 shadow-sm rounded-3 bg-white h-100 p-3">
+            <h6 class="fw-bold mb-3 text-dark text-center" style="font-size: 0.95rem;">Service Requests by Status</h6>
+            <div class="d-flex align-items-center justify-content-center mt-2 gap-4">
+              <!-- CSS Donut Circle -->
+              <div class="position-relative d-flex justify-content-center align-items-center rounded-circle" style="width: 120px; height: 120px; background: conic-gradient(#f59e0b 0% 10%, #3b82f6 10% 45%, #10b981 45% 85%, #ef4444 85% 92%, #64748b 92% 100%);">
+                <div class="bg-white rounded-circle d-flex flex-column justify-content-center align-items-center" style="width: 80px; height: 80px;">
+                  <span class="fw-bold fs-4 lh-1">128</span>
+                  <span class="text-muted" style="font-size: 0.7rem;">Total</span>
+                </div>
+              </div>
+              <!-- Legend -->
+              <div class="d-flex flex-column gap-2 text-secondary" style="font-size: 0.75rem;">
+                <div class="d-flex justify-content-between gap-3"><span class="d-flex align-items-center gap-1"><span class="d-inline-block rounded-circle" style="width:8px; height:8px; background-color: #f59e0b;"></span> Pending</span> <span class="fw-bold text-dark">12</span></div>
+                <div class="d-flex justify-content-between gap-3"><span class="d-flex align-items-center gap-1"><span class="d-inline-block rounded-circle" style="width:8px; height:8px; background-color: #3b82f6;"></span> Under Process</span> <span class="fw-bold text-dark">48</span></div>
+                <div class="d-flex justify-content-between gap-3"><span class="d-flex align-items-center gap-1"><span class="d-inline-block rounded-circle" style="width:8px; height:8px; background-color: #10b981;"></span> Completed</span> <span class="fw-bold text-dark">52</span></div>
+                <div class="d-flex justify-content-between gap-3"><span class="d-flex align-items-center gap-1"><span class="d-inline-block rounded-circle" style="width:8px; height:8px; background-color: #ef4444;"></span> Rejected</span> <span class="fw-bold text-dark">8</span></div>
+                <div class="d-flex justify-content-between gap-3"><span class="d-flex align-items-center gap-1"><span class="d-inline-block rounded-circle" style="width:8px; height:8px; background-color: #64748b;"></span> Cancelled</span> <span class="fw-bold text-dark">8</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Today's Flights -->
+        <div class="col-xl-4">
+          <div class="card border-0 shadow-sm rounded-3 bg-white h-100 p-3">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <div class="d-flex align-items-center gap-2">
+                <i class="bi bi-airplane-fill text-danger fs-5"></i>
+                <h6 class="fw-bold mb-0 text-dark" style="font-size: 0.95rem;">Today's Flights (Live)</h6>
+              </div>
+              <a href="#" class="text-danger text-decoration-none fw-semibold" style="font-size: 0.8rem;">View All &rarr;</a>
+            </div>
+            
+            <table class="table table-borderless mb-0" style="font-size: 0.8rem;">
+              <thead>
+                <tr class="text-secondary" style="border-bottom: 1px solid #f1f5f9;">
+                  <th class="py-2 fw-semibold">Flight No.</th>
+                  <th class="py-2 fw-semibold">Route</th>
+                  <th class="py-2 fw-semibold">STA / STD</th>
+                  <th class="py-2 fw-semibold text-center">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="py-2">BAH001</td>
+                  <td class="py-2 text-secondary">BAH &rarr; LHR</td>
+                  <td class="py-2 text-secondary">10:20 / 10:40</td>
+                  <td class="py-2 text-center"><span class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-2">Departed</span></td>
+                </tr>
+                <tr>
+                  <td class="py-2">GF123</td>
+                  <td class="py-2 text-secondary">BAH &rarr; DXB</td>
+                  <td class="py-2 text-secondary">11:10 / 11:30</td>
+                  <td class="py-2 text-center"><span class="badge bg-info bg-opacity-10 text-info rounded-pill px-2">Boarding</span></td>
+                </tr>
+                <tr>
+                  <td class="py-2">TK789</td>
+                  <td class="py-2 text-secondary">BAH &rarr; IST</td>
+                  <td class="py-2 text-secondary">13:25 / 13:40</td>
+                  <td class="py-2 text-center"><span class="badge bg-success bg-opacity-10 text-success rounded-pill px-2">On Time</span></td>
+                </tr>
+                <tr>
+                  <td class="py-2">QR220</td>
+                  <td class="py-2 text-secondary">BAH &rarr; DOH</td>
+                  <td class="py-2 text-secondary">15:15 / 15:30</td>
+                  <td class="py-2 text-center"><span class="badge bg-warning bg-opacity-10 text-warning rounded-pill px-2">Delayed</span></td>
+                </tr>
+                <tr>
+                  <td class="py-2">EK835</td>
+                  <td class="py-2 text-secondary">BAH &rarr; DXB</td>
+                  <td class="py-2 text-secondary">17:00 / 17:20</td>
+                  <td class="py-2 text-center"><span class="badge bg-success bg-opacity-10 text-success rounded-pill px-2">On Time</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Row 1 -->
+      <div class="row g-3 mb-3">
+        <!-- Recent Service Requests -->
+        <div class="col-xl-8">
+          <div class="card border-0 shadow-sm rounded-3 bg-white h-100 p-3">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <div class="d-flex align-items-center gap-2">
+                <i class="bi bi-file-earmark-text-fill text-danger fs-5"></i>
+                <div>
+                  <h6 class="fw-bold mb-0 text-dark" style="font-size: 0.95rem;">Recent Service Requests</h6>
+                  <div class="text-muted" style="font-size: 0.75rem;">Latest service requests raised by airlines</div>
+                </div>
+              </div>
+              <a href="#" class="text-danger text-decoration-none fw-semibold" style="font-size: 0.8rem;">View All &rarr;</a>
+            </div>
+            <table class="table table-borderless table-hover mb-0" style="font-size: 0.8rem;">
+              <thead style="background-color: #f8fafc; border-bottom: 2px solid #f1f5f9;">
+                <tr>
+                  <th class="py-2 px-3 fw-bold text-secondary">Request ID</th>
+                  <th class="py-2 fw-bold text-secondary">Airline</th>
+                  <th class="py-2 fw-bold text-secondary">Flight No.</th>
+                  <th class="py-2 fw-bold text-secondary">Service Type</th>
+                  <th class="py-2 fw-bold text-secondary">Request Date</th>
+                  <th class="py-2 text-center fw-bold text-secondary">Status</th>
+                  <th class="py-2 text-center fw-bold text-secondary">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="py-2 px-3">SR-2026-00124</td>
+                  <td class="py-2 text-secondary">Gulf Air</td>
+                  <td class="py-2">GF123</td>
+                  <td class="py-2 text-secondary">Ramp Handling</td>
+                  <td class="py-2 text-secondary">21 Sep 2026, 16:45</td>
+                  <td class="py-2 text-center"><span class="badge bg-warning bg-opacity-10 text-warning px-2 rounded-pill">Pending</span></td>
+                  <td class="py-2 text-center"><i class="bi bi-eye text-dark" style="cursor: pointer;"></i></td>
+                </tr>
+                <tr>
+                  <td class="py-2 px-3">SR-2026-00123</td>
+                  <td class="py-2 text-secondary">Qatar Airways</td>
+                  <td class="py-2">QR220</td>
+                  <td class="py-2 text-secondary">Push Back</td>
+                  <td class="py-2 text-secondary">21 Sep 2026, 15:12</td>
+                  <td class="py-2 text-center"><span class="badge bg-info bg-opacity-10 text-info px-2 rounded-pill">Under Process</span></td>
+                  <td class="py-2 text-center"><i class="bi bi-eye text-dark" style="cursor: pointer;"></i></td>
+                </tr>
+                <tr>
+                  <td class="py-2 px-3">SR-2026-00122</td>
+                  <td class="py-2 text-secondary">Emirates</td>
+                  <td class="py-2">EK835</td>
+                  <td class="py-2 text-secondary">Baggage Handling</td>
+                  <td class="py-2 text-secondary">21 Sep 2026, 13:08</td>
+                  <td class="py-2 text-center"><span class="badge bg-success bg-opacity-10 text-success px-2 rounded-pill">Completed</span></td>
+                  <td class="py-2 text-center"><i class="bi bi-eye text-dark" style="cursor: pointer;"></i></td>
+                </tr>
+                <tr>
+                  <td class="py-2 px-3">SR-2026-00121</td>
+                  <td class="py-2 text-secondary">British Airways</td>
+                  <td class="py-2">BAH001</td>
+                  <td class="py-2 text-secondary">Cleaning</td>
+                  <td class="py-2 text-secondary">21 Sep 2026, 11:20</td>
+                  <td class="py-2 text-center"><span class="badge bg-success bg-opacity-10 text-success px-2 rounded-pill">Completed</span></td>
+                  <td class="py-2 text-center"><i class="bi bi-eye text-dark" style="cursor: pointer;"></i></td>
+                </tr>
+                <tr>
+                  <td class="py-2 px-3">SR-2026-00120</td>
+                  <td class="py-2 text-secondary">Flynas</td>
+                  <td class="py-2">XY321</td>
+                  <td class="py-2 text-secondary">GPU</td>
+                  <td class="py-2 text-secondary">21 Sep 2026, 10:05</td>
+                  <td class="py-2 text-center"><span class="badge bg-danger bg-opacity-10 text-danger px-2 rounded-pill">Cancelled</span></td>
+                  <td class="py-2 text-center"><i class="bi bi-eye text-dark" style="cursor: pointer;"></i></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="col-xl-4">
+          <div class="card border-0 shadow-sm rounded-3 bg-white h-100 p-3">
+            <div class="d-flex align-items-center gap-2 mb-3">
+              <i class="bi bi-lightning-fill text-danger fs-5"></i>
+              <div>
+                <h6 class="fw-bold mb-0 text-dark" style="font-size: 0.95rem;">Quick Actions</h6>
+                <div class="text-muted" style="font-size: 0.75rem;">Common administrative tasks</div>
+              </div>
+            </div>
+            
+            <div class="row g-2">
+              <div class="col-6">
+                <button class="btn w-100 h-100 py-3 rounded-3 border-0 d-flex flex-column align-items-center justify-content-center text-white" data-bs-toggle="modal" data-bs-target="#addAirlineModal" style="background-color: #19345e; min-height: 85px;">
+                  <i class="bi bi-airplane mb-2 fs-5"></i>
+                  <span style="font-size: 0.8rem; font-weight: 600;">Add Airline</span>
+                </button>
+              </div>
+              <div class="col-6">
+                <button class="btn btn-light w-100 h-100 py-3 rounded-3 border d-flex flex-column align-items-center justify-content-center" style="min-height: 85px;">
+                  <i class="bi bi-people-fill mb-2 fs-5" style="color: #0f172a;"></i>
+                  <span style="font-size: 0.8rem; font-weight: 600; color: #0f172a;">Manage Users</span>
+                </button>
+              </div>
+              <div class="col-6">
+                <button class="btn btn-light w-100 h-100 py-3 rounded-3 border d-flex flex-column align-items-center justify-content-center" style="min-height: 85px;">
+                  <i class="bi bi-gear-fill mb-2 fs-5" style="color: #0f172a;"></i>
+                  <span style="font-size: 0.8rem; font-weight: 600; color: #0f172a; text-align: center;">Service Request Settings</span>
+                </button>
+              </div>
+              <div class="col-6">
+                <button class="btn btn-light w-100 h-100 py-3 rounded-3 border d-flex flex-column align-items-center justify-content-center" style="min-height: 85px;">
+                  <i class="bi bi-file-text-fill mb-2 fs-5" style="color: #0f172a;"></i>
+                  <span style="font-size: 0.8rem; font-weight: 600; color: #0f172a;">Publish Notice</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Row 2 -->
+      <div class="row g-3">
+        <!-- Recent Notifications -->
+        <div class="col-xl-5">
+          <div class="card border-0 shadow-sm rounded-3 bg-white h-100 p-3">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <div class="d-flex align-items-center gap-2">
+                <i class="bi bi-bell-fill text-danger fs-5"></i>
+                <div>
+                  <h6 class="fw-bold mb-0 text-dark" style="font-size: 0.95rem;">Recent Notifications</h6>
+                  <div class="text-muted" style="font-size: 0.75rem;">Latest notices sent to airlines and users</div>
+                </div>
+              </div>
+              <a href="#" class="text-danger text-decoration-none fw-semibold" style="font-size: 0.8rem;">View All &rarr;</a>
+            </div>
+            
+            <div class="list-group list-group-flush" style="font-size: 0.8rem;">
+              <div class="list-group-item px-0 py-2 border-bottom d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center gap-2">
+                  <i class="bi bi-record-circle text-dark" style="font-size: 0.6rem;"></i>
+                  <span>Flight GF123 delayed by 30 minutes</span>
+                </div>
+                <div class="d-flex align-items-center gap-3">
+                  <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill">Flight Update</span>
+                  <span class="text-muted" style="min-width: 100px; text-align: right;">21 Sep 2026, 16:10</span>
+                </div>
+              </div>
+              <div class="list-group-item px-0 py-2 border-bottom d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center gap-2">
+                  <i class="bi bi-record-circle text-dark" style="font-size: 0.6rem;"></i>
+                  <span>New document uploaded: Revised SLA</span>
+                </div>
+                <div class="d-flex align-items-center gap-3">
+                  <span class="badge bg-info bg-opacity-10 text-info rounded-pill" style="min-width: 80px; text-align: center;">Document</span>
+                  <span class="text-muted" style="min-width: 100px; text-align: right;">21 Sep 2026, 14:22</span>
+                </div>
+              </div>
+              <div class="list-group-item px-0 py-2 d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center gap-2">
+                  <i class="bi bi-record-circle text-dark" style="font-size: 0.6rem;"></i>
+                  <span>Service request SR-2026-00122 completed</span>
+                </div>
+                <div class="d-flex align-items-center gap-3">
+                  <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill">Service Update</span>
+                  <span class="text-muted" style="min-width: 100px; text-align: right;">21 Sep 2026, 13:05</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Document Repository -->
+        <div class="col-xl-7">
+          <div class="card border-0 shadow-sm rounded-3 bg-white h-100 p-3">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <div class="d-flex align-items-center gap-2">
+                <i class="bi bi-file-earmark-text-fill text-danger fs-5"></i>
+                <div>
+                  <h6 class="fw-bold mb-0 text-dark" style="font-size: 0.95rem;">Document Repository</h6>
+                  <div class="text-muted" style="font-size: 0.75rem;">Manage contracts, manuals and circulars</div>
+                </div>
+              </div>
+              <a href="#" class="text-danger text-decoration-none fw-semibold" style="font-size: 0.8rem;">View All &rarr;</a>
+            </div>
+            
+            <div class="row g-2 mt-2">
+              <div class="col-sm-4">
+                <div class="p-3 border rounded-3 h-100 d-flex align-items-center gap-3 bg-light">
+                  <div class="bg-danger text-white rounded d-flex justify-content-center align-items-center fs-5" style="width: 40px; height: 40px;"><i class="bi bi-file-pdf-fill"></i></div>
+                  <div>
+                    <h6 class="mb-0 fw-bold text-dark" style="font-size: 0.85rem;"> Contracts</h6>
+                    <div class="text-muted" style="font-size: 0.75rem;">24 Documents</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="p-3 border rounded-3 h-100 d-flex align-items-center gap-3 bg-light">
+                  <div class="bg-primary text-white rounded d-flex justify-content-center align-items-center fs-5" style="width: 40px; height: 40px;"><i class="bi bi-file-text-fill"></i></div>
+                  <div>
+                    <h6 class="mb-0 fw-bold text-dark" style="font-size: 0.85rem;">Operational Manuals</h6>
+                    <div class="text-muted" style="font-size: 0.75rem;">18 Documents</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="p-3 border rounded-3 h-100 d-flex align-items-center gap-3 bg-light">
+                  <div class="bg-success text-white rounded d-flex justify-content-center align-items-center fs-5" style="width: 40px; height: 40px;"><i class="bi bi-journal-text"></i></div>
+                  <div>
+                    <h6 class="mb-0 fw-bold text-dark" style="font-size: 0.85rem;">Notices &amp; Circulars</h6>
+                    <div class="text-muted" style="font-size: 0.75rem;">12 Documents</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Notifications Offcanvas Drawer -->
+  <div class="offcanvas offcanvas-end offcanvas-notifications" tabindex="-1" id="offcanvasNotifications" aria-labelledby="offcanvasNotifLabel">
+    <div class="offcanvas-header border-bottom py-3">
+      <div>
+        <h5 class="offcanvas-title fw-bold fs-6 text-dark m-0" id="offcanvasNotifLabel">
+          <i class="bi bi-bell-fill text-danger me-2"></i> Operational Notifications
+        </h5>
+        <small class="text-muted">Live Airside Ground Handling Telemetry</small>
+      </div>
+      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="notif-tab-nav">
+      <button type="button" class="notif-tab-btn active" data-notif-filter="all">All (12)</button>
+      <button type="button" class="notif-tab-btn" data-notif-filter="ops">Airside (5)</button>
+      <button type="button" class="notif-tab-btn" data-notif-filter="confirm">Confirmations (4)</button>
+      <button type="button" class="notif-tab-btn" data-notif-filter="billing">Billing (3)</button>
+    </div>
+    <div class="offcanvas-body p-0" style="overflow-y: auto;">
+      <a href="live-status.html" class="notif-item unread" data-category="ops">
+        <div class="notif-avatar red"><i class="bi bi-airplane-fill"></i></div>
+        <div class="flex-grow-1">
+          <div class="notif-title-row">
+            <span class="notif-title">Flight GF 504 In Progress</span>
+            <span class="notif-time">Just now</span>
+          </div>
+          <p class="notif-snippet">Ramp turnaround commenced at Stand G03. Fueling & baggage loading active.</p>
+        </div>
+      </a>
+      <a href="confirmations.html" class="notif-item unread" data-category="confirm">
+        <div class="notif-avatar blue"><i class="bi bi-check2-circle"></i></div>
+        <div class="flex-grow-1">
+          <div class="notif-title-row">
+            <span class="notif-title">Electronic Sign-Off Required</span>
+            <span class="notif-time">10m ago</span>
+          </div>
+          <p class="notif-snippet">Flight GF 152 departure handling finalized. Captain signature pending.</p>
+        </div>
+      </a>
+      <a href="service-requests.html" class="notif-item unread" data-category="ops">
+        <div class="notif-avatar amber"><i class="bi bi-truck"></i></div>
+        <div class="flex-grow-1">
+          <div class="notif-title-row">
+            <span class="notif-title">High-Priority GSE Dispatched</span>
+            <span class="notif-time">22m ago</span>
+          </div>
+          <p class="notif-snippet">Air Start Unit (ASU-04) en-route to Remote Stand S21 for GF 210.</p>
+        </div>
+      </a>
+      <a href="invoices.html" class="notif-item" data-category="billing">
+        <div class="notif-avatar green"><i class="bi bi-receipt"></i></div>
+        <div class="flex-grow-1">
+          <div class="notif-title-row">
+            <span class="notif-title">Invoice INV-2026-0891 Issued</span>
+            <span class="notif-time">1h ago</span>
+          </div>
+          <p class="notif-snippet">Ground handling disbursement statement for Gulf Air July turnaround.</p>
+        </div>
+      </a>
+      <a href="documents.html" class="notif-item" data-category="ops">
+        <div class="notif-avatar blue"><i class="bi bi-file-earmark-pdf"></i></div>
+        <div class="flex-grow-1">
+          <div class="notif-title-row">
+            <span class="notif-title">New IATA De-icing SOP Uploaded</span>
+            <span class="notif-time">2h ago</span>
+          </div>
+          <p class="notif-snippet">Bahrain Airport Services compliance document v4.2 published.</p>
+        </div>
+      </a>
+    </div>
+          <div class="p-3 border-top bg-light text-center">
+        <a href="notifications.html" class="btn btn-outline-secondary btn-sm w-100 fw-semibold">
+          View All Notifications
+        </a>
+      </div>
+  </div>
+
+  <!-- Command Palette / Global Search Modal (⌘K) -->
+  <div class="modal fade" id="commandPaletteModal" tabindex="-1" aria-labelledby="cmdPaletteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content border-0 shadow-lg" style="border-radius: 16px; overflow: hidden;">
+        <div class="cmd-search-input-wrap bg-white">
+          <i class="bi bi-search text-danger"></i>
+          <input type="text" id="cmdPaletteSearchInput" class="cmd-search-input" placeholder="Type a flight (GF 504), service (Fueling), invoice, or page..." autocomplete="off">
+          <span class="badge bg-light text-secondary border">ESC to close</span>
+        </div>
+        <div class="cmd-results-body bg-white">
+          <div class="cmd-category-title">Portal Navigation</div>
+          <a href="dashboard.html" class="cmd-result-item"><div class="cmd-result-left"><i class="bi bi-house-door text-danger"></i> Operational Dashboard</div><span class="cmd-tag">Page</span></a>
+          <a href="flights.html" class="cmd-result-item"><div class="cmd-result-left"><i class="bi bi-airplane text-danger"></i> Flight Management</div><span class="cmd-tag">Page</span></a>
+          <a href="live-status.html" class="cmd-result-item"><div class="cmd-result-left"><i class="bi bi-tv text-danger"></i> Live FIDS Wallboard Display</div><span class="cmd-tag">Screen</span></a>
+          <a href="service-requests.html" class="cmd-result-item"><div class="cmd-result-left"><i class="bi bi-file-earmark-text text-danger"></i> Service Requests</div><span class="cmd-tag">Page</span></a>
+          <a href="confirmations.html" class="cmd-result-item"><div class="cmd-result-left"><i class="bi bi-check2-circle text-danger"></i> Electronic Confirmations</div><span class="cmd-tag">Page</span></a>
+          <a href="invoices.html" class="cmd-result-item"><div class="cmd-result-left"><i class="bi bi-receipt text-danger"></i> Invoices & Billing</div><span class="cmd-tag">Page</span></a>
+          <a href="reports.html" class="cmd-result-item"><div class="cmd-result-left"><i class="bi bi-bar-chart-line text-danger"></i> Reports & SLA Analytics</div><span class="cmd-tag">Page</span></a>
+          <a href="documents.html" class="cmd-result-item"><div class="cmd-result-left"><i class="bi bi-folder text-danger"></i> Document Repository</div><span class="cmd-tag">Page</span></a>
+          <a href="administration.html" class="cmd-result-item"><div class="cmd-result-left"><i class="bi bi-gear text-danger"></i> Roles & Permissions</div><span class="cmd-tag">Admin</span></a>
+
+          <div class="cmd-category-title mt-2">Active Airside Flights</div>
+          <a href="live-status.html" class="cmd-result-item"><div class="cmd-result-left"><i class="bi bi-airplane-fill text-primary"></i> GF 504 &bull; BAH &rarr; BOM (Stand G03)</div><span class="badge bg-primary text-white">In Progress</span></a>
+          <a href="flights.html" class="cmd-result-item"><div class="cmd-result-left"><i class="bi bi-airplane-fill text-success"></i> GF 006 &bull; BAH &rarr; DXB (Stand S07)</div><span class="badge bg-success text-white">On Time</span></a>
+          <a href="flights.html" class="cmd-result-item"><div class="cmd-result-left"><i class="bi bi-airplane-fill text-warning"></i> GF 210 &bull; CAI &rarr; BAH (Stand S21)</div><span class="badge bg-warning text-dark">Delayed</span></a>
+          <a href="flights.html" class="cmd-result-item"><div class="cmd-result-left"><i class="bi bi-airplane-fill text-info"></i> GF 152 &bull; BAH &rarr; LHR (Stand S12)</div><span class="badge bg-info text-dark">Boarding</span></a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap 5.3 JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Application Logic -->
+  <script src="js/main.js"></script>
+    <!-- Add Airline Modal -->
+    <div class="modal fade" id="addAirlineModal" tabindex="-1" aria-labelledby="addAirlineModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+          <div class="modal-header border-bottom-0 bg-light p-4 pb-3">
+            <div>
+              <h5 class="modal-title fw-bold text-dark mb-1" id="addAirlineModalLabel">Add New Airline</h5>
+              <div class="text-secondary" style="font-size: 0.85rem;">Register a new airline in the GHS portal.</div>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body p-4 pt-2">
+            <form id="addAirlineForm">
+              
+              <h6 class="fw-bold text-dark mb-3 border-bottom pb-2" style="font-size: 0.95rem;">Basic Information</h6>
+              <div class="row g-3 mb-4">
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold text-secondary" style="font-size: 0.85rem;">Airline Name <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" placeholder="e.g. Gulf Air">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold text-secondary" style="font-size: 0.85rem;">Legal Name</label>
+                  <input type="text" class="form-control" placeholder="e.g. Gulf Air Company B.S.C.">
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label fw-semibold text-secondary" style="font-size: 0.85rem;">IATA Code <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control text-uppercase" placeholder="e.g. GF" maxlength="2">
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label fw-semibold text-secondary" style="font-size: 0.85rem;">ICAO Code</label>
+                  <input type="text" class="form-control text-uppercase" placeholder="e.g. GFA" maxlength="3">
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label fw-semibold text-secondary" style="font-size: 0.85rem;">Call Sign</label>
+                  <input type="text" class="form-control text-uppercase" placeholder="e.g. GULFAIR">
+                </div>
+                <div class="col-md-12">
+                  <label class="form-label fw-semibold text-secondary" style="font-size: 0.85rem;">Airline Logo</label>
+                  <input class="form-control" type="file" id="formFile">
+                </div>
+              </div>
+
+              <h6 class="fw-bold text-dark mb-3 border-bottom pb-2" style="font-size: 0.95rem;">Contact &amp; Operational Details</h6>
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold text-secondary" style="font-size: 0.85rem;">Primary Contact Email <span class="text-danger">*</span></label>
+                  <input type="email" class="form-control" placeholder="ops@airline.com">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold text-secondary" style="font-size: 0.85rem;">Contact Phone</label>
+                  <input type="text" class="form-control" placeholder="+973 12345678">
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label fw-semibold text-secondary" style="font-size: 0.85rem;">Region</label>
+                  <select class="form-select">
+                    <option selected disabled>Select Region...</option>
+                    <option>Middle East</option>
+                    <option>Europe</option>
+                    <option>Asia</option>
+                    <option>Americas</option>
+                    <option>Africa</option>
+                  </select>
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label fw-semibold text-secondary" style="font-size: 0.85rem;">Home Hub</label>
+                  <input type="text" class="form-control text-uppercase" placeholder="e.g. BAH">
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label fw-semibold text-secondary" style="font-size: 0.85rem;">Initial Status</label>
+                  <select class="form-select">
+                    <option value="pending" selected>Pending Approval</option>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                  </select>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer border-top-0 bg-light p-4 pt-3">
+            <button type="button" class="btn btn-outline-secondary fw-semibold px-4" data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-danger fw-semibold px-4" data-bs-dismiss="modal">Register Airline</button>
+          </div>
+        </div>
+      </div>
+    </div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
